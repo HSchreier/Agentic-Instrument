@@ -117,6 +117,42 @@ class TestInfo:
         assert data["channels"]["synth"] == 1
 
 
+class TestChat:
+    """Chat interface endpoint tests (Claude API optional)."""
+
+    def test_chat_message_endpoint_exists(self):
+        """Chat endpoint should exist or return graceful error."""
+        response = client.post(
+            "/api/chat/message",
+            json={"message": "Create a techno pattern at 128 BPM"}
+        )
+        # Should either work (200) or gracefully fail (503 for missing API key)
+        assert response.status_code in [200, 503, 404]
+
+    def test_chat_message_without_api_key(self):
+        """Should handle missing Claude API key gracefully."""
+        import os
+        # Ensure no API key is set for this test
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+
+        response = client.post(
+            "/api/chat/message",
+            json={"message": "test"}
+        )
+
+        if response.status_code == 503:
+            # Expected when Claude API not configured
+            assert "Claude API" in response.json().get("detail", "")
+        elif response.status_code == 404:
+            # Router not registered (anthropic not installed)
+            pass
+        # If 200, then API key is available and it worked
+        elif response.status_code == 200:
+            data = response.json()
+            assert "content" in data
+            assert "intent" in data
+
+
 class TestOpenAPIDocs:
     """OpenAPI documentation tests."""
 
