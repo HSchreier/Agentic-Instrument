@@ -16,6 +16,9 @@ from rhythm_wolf.mappings import TEMPO_RANGES, PATTERNS, DRUM_NOTES, VELOCITIES
 from pydantic import BaseModel
 from typing import Optional, List
 
+# Import routers
+from chat_routes import router as chat_router
+
 app = FastAPI(
     title="Rhythm Wolf MIDI API",
     description="Generate and send MIDI patterns to Akai Rhythm Wolf",
@@ -30,6 +33,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register routers
+app.include_router(chat_router)
 
 # Models
 class MIDIEvent(BaseModel):
