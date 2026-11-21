@@ -1,104 +1,186 @@
-# Rhythm Wolf MIDI Export Toolkit
+# 🎹 Rhythm Wolf MIDI Export Toolkit
 
-Generate and send MIDI drum patterns to your Akai Rhythm Wolf hardware—containerized and ready to go.
+<div align="center">
 
-## Features
+[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FRythm--Wolf--Midi--PAtchre-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)](https://hub.docker.com)
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB?style=flat-square&logo=python)](https://python.org)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-- **Generate patterns** in multiple styles (techno, house, tech house, minimal)
-- **Send to hardware** via USB or 5-pin MIDI in real-time
-- **Containerized** with all dependencies baked in—no version conflicts
-- **CLI-based** for scripting and automation
-- **Save patterns** as JSON for reuse
+**Generate MIDI drum patterns with Claude. Send real-time beats to your Akai Rhythm Wolf.**
 
-## Quick Start
+[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [CLI Commands](#-cli-commands)
 
-### 1. Build the Docker image
+</div>
+
+---
+
+## ✨ Features
+
+🎵 **Generate patterns** in multiple styles (Techno, House, Tech House, Minimal)  
+🎛️ **Send real-time MIDI** via USB or 5-pin MIDI—device quantizes automatically  
+📦 **Fully containerized** with Docker—no version conflicts, works everywhere  
+⚡ **CLI-first** design for scripting and automation  
+💾 **Save & load** patterns as JSON for reuse  
+🔄 **Claude-ready** (future: generate patterns from natural language)
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Akai Rhythm Wolf** (powered on, USB or MIDI connected)
+- **Docker Desktop** installed
+
+### 1️⃣ Setup
 
 ```bash
-docker-compose build
+# Clone & navigate
+git clone https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre.git
+cd Rythm-Wolf-Midi-PAtchre
+git checkout dev
+
+# Build the image
+make build
 ```
 
-### 2. List MIDI devices
+### 2️⃣ Check Devices
 
 ```bash
-docker-compose run --rm rhythm-wolf devices
+make devices
 ```
 
-You should see your Rhythm Wolf listed.
-
-### 3. Generate a pattern
-
-```bash
-docker-compose run --rm rhythm-wolf generate --style techno --tempo 128
+Output:
+```
+Available MIDI output devices:
+  1. Akai Rhythm Wolf
+  2. IAC Driver Bus 1
 ```
 
-Output is JSON showing channel, note, and velocity for each MIDI event.
-
-### 4. Send to Rhythm Wolf
-
-Connect your Rhythm Wolf via USB and run:
+### 3️⃣ Generate a Pattern
 
 ```bash
-docker-compose run --rm -it rhythm-wolf send --style techno --tempo 128
+make generate
 ```
 
-**Important:** The tool will prompt you to:
-1. Put the Rhythm Wolf into **Record Performance mode** (hold SHIFT + press Step 10)
-2. Select a destination pattern on the device
-3. Press Enter in the CLI to send the pattern
+Returns JSON:
+```json
+{
+  "metadata": {
+    "style": "techno",
+    "tempo": 128,
+    "num_events": 24
+  },
+  "events": [
+    {"channel": 10, "note": 36, "velocity": 127},
+    ...
+  ]
+}
+```
 
-The device will quantize and record the incoming MIDI notes.
-
-### 5. Save on device
-
-After sending:
-- Exit Record Performance on the device (press SHIFT + Step 10 again)
-- Save the pattern: hold SHIFT + press Step 16 (SAVE)
-
-## Usage
-
-### Commands
+### 4️⃣ Send to Device
 
 ```bash
-# List available MIDI devices
-docker-compose run --rm rhythm-wolf devices
+make send
+```
 
-# Generate pattern and print as JSON
+Then:
+1. **On the Rhythm Wolf:** Hold SHIFT + press Step 10 (enters Record Performance mode)
+2. **In the CLI:** Press Enter
+3. **Watch:** Device quantizes and records MIDI in real-time
+4. **Save:** Hold SHIFT + press Step 16 (SAVE) on the device
+
+✅ Pattern saved to internal memory!
+
+## 🎼 Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  User Request                                              │
+│  "Send me a 128 BPM techno pattern"                        │
+│           ↓                                                 │
+│  ┌───────────────────────────────────────┐                │
+│  │ CLI: make send --style techno         │                │
+│  │ (runs in Docker container)            │                │
+│  └─────────────┬───────────────────────┘                 │
+│                ↓                                            │
+│  ┌────────────────────────────┐                           │
+│  │ Generator creates MIDI     │                           │
+│  │ Kick, Snare, Hats, etc.    │                           │
+│  └─────────────┬──────────────┘                           │
+│                ↓                                            │
+│  ┌────────────────────────────────────┐                  │
+│  │ Sends via USB in real-time:        │                  │
+│  │ Note On  (channel 10, note 36)    │                  │
+│  │ Note Off (after short duration)    │                  │
+│  │ ... (repeat for all events)        │                  │
+│  └─────────────┬─────────────────────┘                  │
+│                ↓                                            │
+│  ┌────────────────────────────────────┐                  │
+│  │ Rhythm Wolf (Record Performance)   │                  │
+│  │ • Receives MIDI notes              │                  │
+│  │ • Quantizes to 16-step grid        │                  │
+│  │ • Records to selected pattern      │                  │
+│  └────────────────────────────────────┘                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 📖 Usage
+
+### Available Commands
+
+#### `make devices`
+List available MIDI output devices. Auto-detects Rhythm Wolf.
+```bash
+$ make devices
+Available MIDI output devices:
+  1. Akai Rhythm Wolf  <- Rhythm Wolf
+  2. IAC Driver Bus 1
+```
+
+#### `make generate` / `generate-file`
+Generate a pattern and display or save as JSON.
+```bash
+$ make generate --style house --tempo 122
+$ make generate-file                        # Saves to patterns/
+
+# Full CLI usage
 docker-compose run --rm rhythm-wolf generate \
   --style techno \
   --tempo 128 \
-  --template four_on_the_floor
-
-# Save pattern to file
-docker-compose run --rm rhythm-wolf generate \
-  --style techno \
-  --output patterns/techno_128.json
-
-# Send a generated pattern to Rhythm Wolf
-docker-compose run --rm -it rhythm-wolf send \
-  --style house \
-  --tempo 122
-
-# Send a saved pattern from file
-docker-compose run --rm -it rhythm-wolf send \
-  --pattern-file patterns/techno_128.json
-
-# Show style info
-docker-compose run --rm rhythm-wolf info --style techno
+  --template four_on_the_floor \
+  --output pattern.json
 ```
 
-### Options
+#### `make send`
+Send pattern to Rhythm Wolf (interactive).
+```bash
+$ make send --style techno
 
-#### `generate`
-- `--style`: Music style (techno, house, tech_house, minimal). Default: techno
-- `--tempo`: Tempo in BPM. If not set, uses recommended range for style
-- `--template`: Pattern template (four_on_the_floor, half_time, minimal). Default: four_on_the_floor
-- `--output`: Save to JSON file instead of stdout
+⚠️  Make sure Rhythm Wolf is in Record Performance mode!
+Press Enter to send pattern...
+✓ Pattern sent!
+Save it on the Rhythm Wolf: hold SHIFT + press Step 16 (SAVE)
+```
 
-#### `send`
-- `--device`: MIDI device name. If not set, auto-detects Rhythm Wolf
-- `--style`, `--tempo`, `--template`: Same as generate
-- `--pattern-file`: Load pattern from JSON file instead of generating
+#### `make info`
+Show style details.
+```bash
+$ make info --style techno
+TECHNO
+  Tempo range: 128–140 BPM
+```
+
+### CLI Options
+
+| Command | Option | Type | Default | Description |
+|---------|--------|------|---------|-------------|
+| `generate` | `--style` | techno\|house\|tech_house\|minimal | techno | Music genre |
+| `generate` | `--tempo` | integer | auto | BPM (auto-picks if not set) |
+| `generate` | `--template` | four_on_the_floor\|half_time\|minimal | four_on_the_floor | Rhythm pattern |
+| `generate` | `--output` | file path | stdout | Save to JSON file |
+| `send` | `--device` | device name | auto-detect | MIDI device to target |
+| `send` | `--pattern-file` | file path | - | Load pattern from JSON |
 
 ## MIDI Specifications
 
@@ -139,39 +221,106 @@ Hypnotic, minimalist:
 - Snare on step 5 only
 - Hats on steps 3, 7, 11, 15
 
-## Example Workflow
+## 📋 Example Workflows
+
+### Workflow 1: Quick Send (Generate & Send)
 
 ```bash
-# 1. Build once
-docker-compose build
+# 1. Build the image
+make build
 
-# 2. Check devices
-docker-compose run --rm rhythm-wolf devices
+# 2. Check if Rhythm Wolf is connected
+make devices
 
-# 3. Generate and save multiple patterns
-docker-compose run --rm rhythm-wolf generate --style techno --output patterns/techno_138.json
-docker-compose run --rm rhythm-wolf generate --style house --output patterns/house_122.json
+# 3. Send a generated pattern
+make send --style techno --tempo 128
 
-# 4. Send pattern to device (interactive)
-docker-compose run --rm -it rhythm-wolf send --pattern-file patterns/techno_138.json
-
-# 5. Repeat step 4 for different patterns
+# On Rhythm Wolf:
+#   - Hold SHIFT + press Step 10 (Record Performance)
+#   - Press Enter in CLI to send
+#   - Hold SHIFT + press Step 16 to save
 ```
 
-## Architecture
+### Workflow 2: Batch Generate & Save
+
+```bash
+# Generate multiple patterns and save to files
+make generate-file --style techno --tempo 128
+make generate-file --style house --tempo 122
+make generate-file --style minimal --tempo 130
+
+# Then send any saved pattern
+docker-compose run --rm -it rhythm-wolf send \
+  --pattern-file patterns/pattern_1234567890.json
+```
+
+### Workflow 3: Script Multiple Sends
+
+```bash
+#!/bin/bash
+# Generate and send 4 patterns to slots 1-4
+
+for style in techno house tech_house minimal; do
+  docker-compose run --rm -it rhythm-wolf send --style $style
+  sleep 2  # Pause for saving
+done
+```
+
+## 🏗️ Architecture
+
+### Project Structure
 
 ```
-cli.py                    # Main CLI entry point
-│
+midi-playground/
+├── cli.py                        # Click-based CLI entrypoint
 ├── rhythm_wolf/
-│   ├── __init__.py
-│   ├── mappings.py       # MIDI note/channel definitions
-│   ├── generator.py      # Pattern generation logic
-│   └── sender.py         # MIDI output handling
-│
-├── Dockerfile            # Container definition
-├── docker-compose.yml    # Docker Compose config
-└── requirements.txt      # Python dependencies
+│   ├── __init__.py              # Package init
+│   ├── mappings.py              # MIDI channels, notes, velocities
+│   ├── generator.py             # Pattern generation engine
+│   └── sender.py                # Real-time MIDI output via mido
+├── Dockerfile                   # Python 3.10 + mido + python-rtmidi
+├── docker-compose.yml           # Compose config (volumes, TTY)
+├── requirements.txt             # Pinned dependencies
+├── Makefile                     # Convenient shortcuts
+├── .gitignore
+└── README.md (this file)
+```
+
+### Component Diagram
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  User (CLI)                                             │
+│  $ make send --style techno                             │
+└────────────────┬─────────────────────────────────────────┘
+                 │
+        ┌────────▼────────┐
+        │   cli.py        │
+        │  (Click CLI)    │
+        └────────┬────────┘
+                 │
+     ┌───────────┴───────────┐
+     │                       │
+┌────▼────────┐    ┌────────▼──────┐
+│ generator   │    │    sender      │
+│  Creates    │    │  Sends MIDI    │
+│  MIDI notes │    │  to device     │
+└────┬────────┘    └────────┬───────┘
+     │                      │
+     └──────────┬───────────┘
+                │
+        ┌───────▼─────────────────┐
+        │  mappings.py            │
+        │ (note/channel defs)     │
+        └────────────────────────┘
+                │
+                │ (MIDI via mido)
+                │
+        ┌───────▼─────────────────┐
+        │  Rhythm Wolf (USB)      │
+        │  Record Performance     │
+        │  Quantize & Store       │
+        └───────────────────────────┘
 ```
 
 ## Troubleshooting
@@ -248,8 +397,110 @@ response = client.messages.create(
 
 MIT
 
-## References
+## 🗂️ Styles & Templates
 
-- [Rhythm Wolf User Guide v1.3](./docs/Rhythm%20Wolf%20-%20User%20Guide%20-%20v1.3.pdf)
+### Music Styles
+
+| Style | Tempo | Vibe | Good For |
+|-------|-------|------|----------|
+| **Deep House** | 118–126 BPM | Groovy, soulful | DJ sets, lounge |
+| **Tech House** | 124–130 BPM | Hypnotic, rhythmic | Dance floor, peak hours |
+| **Techno** | 128–140 BPM | Driving, industrial | Warehouse, production |
+| **Minimal** | 120–135 BPM | Sparse, hypnotic | Background, ambient |
+
+### Rhythm Templates
+
+- **four_on_the_floor**: Classic 4/4 kick on 1-5-9-13
+- **half_time**: Spacious kick on 1-9
+- **minimal**: Hypnotic sparse kick
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! Ideas:
+
+- [ ] Claude Skill integration (generate patterns from chat)
+- [ ] Web UI wrapper
+- [ ] More rhythm templates
+- [ ] Pattern library
+- [ ] MIDI file importer
+- [ ] Live visual feedback
+- [ ] Preset manager
+
+**To contribute:**
+1. Fork the repo
+2. Create a branch (`git checkout -b feature/my-feature`)
+3. Commit changes (`git commit -m "Add my feature"`)
+4. Push (`git push origin feature/my-feature`)
+5. Open a Pull Request
+
+---
+
+## 🗺️ Roadmap
+
+- [x] Basic CLI pattern generation
+- [x] MIDI sender (USB/5-pin)
+- [x] Docker containerization
+- [x] Documentation
+- [ ] Claude Skill for natural language patterns
+- [ ] Web UI dashboard
+- [ ] Preset manager (save/load pattern banks)
+- [ ] Pattern visualizer
+- [ ] Live BPM sync detection
+- [ ] Swing/humanization options
+
+---
+
+## 🐛 Troubleshooting
+
+### "No MIDI devices found"
+
+**macOS:**
+```bash
+# Check System Preferences > Sound > MIDI Devices
+# Ensure Rhythm Wolf is powered on and connected via USB
+# Try restarting Docker Desktop
+```
+
+**Linux:**
+```bash
+# Uncomment devices section in docker-compose.yml
+# Install ALSA: sudo apt-get install alsa-utils
+```
+
+### Device doesn't record
+
+1. ✅ Verify Rhythm Wolf is in Record Performance mode (Step 10 button lit)
+2. ✅ Check MIDI device is correctly selected
+3. ✅ Try a simple test pattern first
+4. ✅ Check velocities are in range (42, 84, 127)
+
+### Wrong tempo
+
+The tool respects your BPM setting. Verify:
+```bash
+# Check generated pattern
+make generate --style techno --tempo 130
+```
+
+---
+
+## 📚 References
+
+- [Akai Rhythm Wolf User Guide v1.3](https://cdn.inmusicbrands.com/akai/attachments/wolf/Rhythm%20Wolf%20-%20User%20Guide%20-%20v1.3.pdf)
 - [MIDI Specification](https://midimusic.github.io/tech/midispec.html)
-- [mido - Python MIDI library](https://mido.readthedocs.io/)
+- [mido – Python MIDI library](https://mido.readthedocs.io/)
+- [python-rtmidi](https://python-rtmidi.readthedocs.io/)
+
+---
+
+## 📄 License
+
+MIT License – See [LICENSE](LICENSE) for details.
+
+---
+
+## 🎵 Made with ❤️ for Rhythm Wolf users
+
+Questions? Open an issue on [GitHub](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/issues).
