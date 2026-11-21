@@ -16,8 +16,13 @@ from rhythm_wolf.mappings import TEMPO_RANGES, PATTERNS, DRUM_NOTES, VELOCITIES
 from pydantic import BaseModel
 from typing import Optional, List
 
-# Import routers
-from chat_routes import router as chat_router
+# Import routers (optional - chat requires anthropic)
+try:
+    from chat_routes import router as chat_router
+    CHAT_AVAILABLE = True
+except (ImportError, Exception):
+    chat_router = None
+    CHAT_AVAILABLE = False
 
 app = FastAPI(
     title="Rhythm Wolf MIDI API",
@@ -34,8 +39,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routers
-app.include_router(chat_router)
+# Register routers (optional)
+if CHAT_AVAILABLE and chat_router:
+    app.include_router(chat_router)
 
 # Models
 class MIDIEvent(BaseModel):

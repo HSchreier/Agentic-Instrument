@@ -2,11 +2,18 @@
 
 import sys
 import json
+import os
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import anthropic
+try:
+    import anthropic
+    ANTHROPIC_AVAILABLE = True
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
+    anthropic = None
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
@@ -15,8 +22,12 @@ from rhythm_wolf.generator import generate_pattern
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
-# Initialize Anthropic client
-client = anthropic.Anthropic()
+# Initialize Anthropic client (optional)
+client = None
+if ANTHROPIC_AVAILABLE:
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if api_key:
+        client = anthropic.Anthropic(api_key=api_key)
 
 SYSTEM_PROMPT = """You are an AI assistant for the Rhythm Wolf MIDI pattern generator.
 Users describe drum patterns, and you help them create, save, and manage MIDI patterns
@@ -65,6 +76,12 @@ class ChatResponse(BaseModel):
 @router.post("/message", response_model=ChatResponse)
 async def chat_message(request: ChatMessage):
     """Process chat message and generate pattern if requested."""
+
+    if not client or not ANTHROPIC_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="Claude API not configured. Set ANTHROPIC_API_KEY environment variable."
+        )
 
     try:
         # Call Claude API
