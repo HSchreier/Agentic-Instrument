@@ -19,10 +19,13 @@
 
 🎵 **Generate patterns** in multiple styles (Techno, House, Tech House, Minimal)  
 🎛️ **Send real-time MIDI** via USB or 5-pin MIDI—device quantizes automatically  
+💬 **Chat interface** powered by Claude—natural language pattern generation  
+📚 **Pattern library** with save/search/organize/favorite functionality  
+🌐 **Modern web UI** built with React, TypeScript, Tailwind CSS, Bun  
 📦 **Fully containerized** with Docker—no version conflicts, works everywhere  
 ⚡ **CLI-first** design for scripting and automation  
 💾 **Save & load** patterns as JSON for reuse  
-🔄 **Claude-ready** (future: generate patterns from natural language)
+🔄 **FastAPI backend** for all pattern operations
 
 ## 🚀 Quick Start
 
@@ -418,15 +421,15 @@ MIT
 
 ## 🤝 Contributing
 
-Contributions welcome! Ideas:
+Contributions welcome! Current work:
 
-- [ ] Claude Skill integration (generate patterns from chat)
-- [ ] Web UI wrapper
+- [ ] Chat interface (see [CHAT_INTERFACE.md](docs/CHAT_INTERFACE.md))
 - [ ] More rhythm templates
-- [ ] Pattern library
 - [ ] MIDI file importer
+- [ ] Pattern visualizer
 - [ ] Live visual feedback
-- [ ] Preset manager
+- [ ] Pattern sharing/collaboration
+- [ ] BPM sync detection
 
 **To contribute:**
 1. Fork the repo
@@ -439,16 +442,27 @@ Contributions welcome! Ideas:
 
 ## 🗺️ Roadmap
 
+**Core System:**
 - [x] Basic CLI pattern generation
 - [x] MIDI sender (USB/5-pin)
 - [x] Docker containerization
-- [x] Documentation
-- [ ] Claude Skill for natural language patterns
-- [ ] Web UI dashboard
-- [ ] Preset manager (save/load pattern banks)
+- [x] FastAPI backend
+- [x] Pattern library system (file-based JSON storage)
+- [x] TypeScript/React web UI
+
+**Chat & AI:**
+- [ ] Chat interface (Phase 1: MVP pattern generation)
+- [ ] Claude API integration
+- [ ] Library management via chat (Phase 2)
+- [ ] Advanced suggestions & variations (Phase 3)
+
+**Future:**
 - [ ] Pattern visualizer
 - [ ] Live BPM sync detection
 - [ ] Swing/humanization options
+- [ ] Pattern sharing/collaboration
+
+**See:** [Chat Interface Docs](docs/CHAT_INTERFACE.md) for detailed vision
 
 ---
 
