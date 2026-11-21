@@ -1,0 +1,424 @@
+openapi: 3.0.3
+info:
+  title: Rhythm Wolf MIDI Export API
+  description: |
+    Generate and send MIDI drum patterns to Akai Rhythm Wolf.
+
+    This API specification defines the contract for the Rhythm Wolf MIDI Export Toolkit.
+    Currently implemented as a CLI; web service API coming soon.
+  version: 0.1.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  contact:
+    name: Rhythm Wolf MIDI Project
+    url: https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development server (future)
+    variables: {}
+
+tags:
+  - name: Devices
+    description: MIDI device discovery and management
+  - name: Patterns
+    description: Pattern generation and transmission
+  - name: Info
+    description: Information about styles and templates
+
+paths:
+  /devices:
+    get:
+      tags:
+        - Devices
+      summary: List available MIDI output devices
+      description: |
+        Returns a list of all available MIDI output devices on the system.
+        The Rhythm Wolf device will appear in this list when connected via USB or 5-pin MIDI.
+      operationId: listDevices
+      responses:
+        '200':
+          description: Successfully retrieved device list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceList'
+        '500':
+          description: Error querying MIDI devices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /patterns/generate:
+    post:
+      tags:
+        - Patterns
+      summary: Generate a MIDI drum pattern
+      description: |
+        Generates a MIDI drum pattern based on specified style, tempo, and template.
+        Returns pattern as JSON with note events (channel, note number, velocity).
+        Does NOT send to device; use /patterns/send for transmission.
+      operationId: generatePattern
+      requestBody:
+        description: Pattern generation parameters
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePatternRequest'
+      responses:
+        '200':
+          description: Pattern successfully generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pattern'
+        '400':
+          description: Invalid parameters (unknown style, invalid tempo, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /patterns/send:
+    post:
+      tags:
+        - Patterns
+      summary: Send pattern to Rhythm Wolf in real-time
+      description: |
+        Transmits a MIDI pattern to the Rhythm Wolf device in real-time.
+
+        **Device must be in Record Performance mode:**
+        - Hold SHIFT + press Step 10 on the Rhythm Wolf
+        - Pattern is quantized and recorded automatically
+        - Hold SHIFT + press Step 16 to save on device
+
+        Timing is based on specified tempo; MIDI clock sync is optional.
+      operationId: sendPattern
+      requestBody:
+        description: Pattern and device selection
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPatternRequest'
+      responses:
+        '200':
+          description: Pattern successfully sent to device
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendPatternResponse'
+        '400':
+          description: Invalid pattern or device not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Device connection failed or timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /info/styles:
+    get:
+      tags:
+        - Info
+      summary: List available music styles
+      description: |
+        Returns metadata for each supported music style, including recommended
+        tempo ranges and descriptions.
+      operationId: listStyles
+      responses:
+        '200':
+          description: Styles information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  styles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StyleInfo'
+
+  /info/templates:
+    get:
+      tags:
+        - Info
+      summary: List available rhythm templates
+      description: |
+        Returns metadata for each rhythm pattern template.
+      operationId: listTemplates
+      responses:
+        '200':
+          description: Templates information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TemplateInfo'
+
+  /info/mappings:
+    get:
+      tags:
+        - Info
+      summary: Get MIDI note and channel mappings
+      description: |
+        Returns the MIDI channel and note number assignments for all drum sounds
+        and bass synth. Useful for understanding the hardware's MIDI implementation.
+      operationId: getMappings
+      responses:
+        '200':
+          description: MIDI mappings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MIDIMappings'
+
+components:
+  schemas:
+    # Devices
+    DeviceList:
+      type: object
+      required:
+        - devices
+      properties:
+        devices:
+          type: array
+          description: List of available MIDI output device names
+          items:
+            type: string
+            example: "Akai Rhythm Wolf"
+
+    # Patterns
+    GeneratePatternRequest:
+      type: object
+      properties:
+        style:
+          type: string
+          enum:
+            - techno
+            - house
+            - tech_house
+            - minimal
+          default: techno
+          description: Music style
+        tempo:
+          type: integer
+          minimum: 20
+          maximum: 300
+          nullable: true
+          description: Tempo in BPM. If null, uses style's recommended range.
+          example: 128
+        template:
+          type: string
+          enum:
+            - four_on_the_floor
+            - half_time
+            - minimal
+          default: four_on_the_floor
+          description: Rhythm pattern template
+        include_bass:
+          type: boolean
+          default: false
+          description: Include bass synth notes (channel 1)
+
+    Pattern:
+      type: object
+      required:
+        - metadata
+        - events
+      properties:
+        metadata:
+          $ref: '#/components/schemas/PatternMetadata'
+        events:
+          type: array
+          description: MIDI note events (channel, note, velocity)
+          items:
+            $ref: '#/components/schemas/MIDIEvent'
+
+    PatternMetadata:
+      type: object
+      properties:
+        style:
+          type: string
+          example: techno
+        tempo:
+          type: integer
+          example: 128
+        num_events:
+          type: integer
+          example: 24
+        generated_at:
+          type: string
+          format: date-time
+
+    MIDIEvent:
+      type: object
+      required:
+        - channel
+        - note
+        - velocity
+      properties:
+        channel:
+          type: integer
+          enum: [1, 10]
+          description: MIDI channel (1=synth, 10=drums)
+        note:
+          type: integer
+          minimum: 0
+          maximum: 127
+          description: MIDI note number (0–127)
+          example: 36
+        velocity:
+          type: integer
+          minimum: 0
+          maximum: 127
+          description: MIDI velocity (0=off, 1–127=on)
+          example: 127
+
+    SendPatternRequest:
+      type: object
+      required:
+        - device
+        - pattern
+      properties:
+        device:
+          type: string
+          description: Name of MIDI output device
+          example: "Akai Rhythm Wolf"
+        pattern:
+          $ref: '#/components/schemas/Pattern'
+        clock_source:
+          type: string
+          enum:
+            - internal
+            - external
+          default: internal
+          description: MIDI clock source (device-side setting)
+
+    SendPatternResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+            - partial
+            - failed
+          example: success
+        events_sent:
+          type: integer
+          example: 24
+        duration_ms:
+          type: number
+          description: Time taken to transmit pattern (milliseconds)
+          example: 2400
+        message:
+          type: string
+          example: "Pattern sent successfully"
+
+    # Info
+    StyleInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: techno
+        tempo_min:
+          type: integer
+          example: 128
+        tempo_max:
+          type: integer
+          example: 140
+        description:
+          type: string
+          example: "Driving, industrial electronic music"
+
+    TemplateInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: four_on_the_floor
+        description:
+          type: string
+          example: "Kick on 1-5-9-13, snare on 5-13, hats on even 16ths"
+        steps:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: integer
+
+    MIDIMappings:
+      type: object
+      properties:
+        channels:
+          type: object
+          properties:
+            drums:
+              type: integer
+              example: 10
+            synth:
+              type: integer
+              example: 1
+        drum_notes:
+          type: object
+          properties:
+            kick:
+              type: integer
+              example: 36
+            snare:
+              type: integer
+              example: 38
+            percussion:
+              type: integer
+              example: 40
+            hihat_open:
+              type: integer
+              example: 42
+            hihat_closed:
+              type: integer
+              example: 44
+        velocities:
+          type: object
+          properties:
+            soft:
+              type: integer
+              example: 42
+            medium:
+              type: integer
+              example: 84
+            accent:
+              type: integer
+              example: 127
+
+    # Errors
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          example: "invalid_device"
+        message:
+          type: string
+          example: "MIDI device 'Unknown Device' not found"
+        code:
+          type: integer
+          example: 400
+        timestamp:
+          type: string
+          format: date-time
