@@ -1,241 +1,163 @@
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { type Pattern } from '@/lib/api'
 
-interface PatternItem {
+interface PresetPattern {
   id: string
   name: string
   style: string
   tempo: number
-  tags: string[]
   description: string
-  created_at: string
-  plays: number
-  favorite: boolean
+  metadata: {
+    style: string
+    tempo: number
+    num_events: number
+  }
+  events: Array<{ channel: number; note: number; velocity: number; step: number }>
 }
 
-interface LibraryStats {
-  total_patterns: number
-  by_style: Record<string, number>
-  by_tag: Record<string, number>
-  total_plays: number
-  favorites: number
+interface PatternLibraryProps {
+  onPattern?: (pattern: Pattern) => void
+  onSave?: (pattern: Pattern) => void
+  onSend?: (pattern: Pattern) => void
 }
 
-export function PatternLibrary() {
-  const [style, setStyle] = useState<string | null>(null)
+export function PatternLibrary({ onPattern }: PatternLibraryProps) {
   const [search, setSearch] = useState('')
-  const [favoritesOnly, setFavoritesOnly] = useState(false)
-  const [selectedPattern, setSelectedPattern] = useState<PatternItem | null>(null)
-  const queryClient = useQueryClient()
+  const [selectedStyle, setSelectedStyle] = useState<string | null>(null)
 
-  // Fetch patterns
-  const { data: libraryData = { patterns: [], total: 0 }, isLoading } = useQuery({
-    queryKey: ['library', style, search, favoritesOnly],
+  // Fetch presets
+  const { data: presetsData = { presets: [], total: 0 }, isLoading } = useQuery({
+    queryKey: ['presets'],
     queryFn: async () => {
-      const { data } = await axios.get('/api/library/patterns', {
-        params: { style, search, favorites_only: favoritesOnly },
-      })
+      const { data } = await axios.get('/api/v1/library/presets')
       return data
     },
   })
 
-  // Fetch statistics
-  const { data: stats } = useQuery({
-    queryKey: ['library-stats'],
-    queryFn: async () => {
-      const { data } = await axios.get('/api/library/statistics')
-      return data as LibraryStats
-    },
+  // Filter presets
+  const filteredPresets = presetsData.presets.filter((p: PresetPattern) => {
+    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
+                         p.description.toLowerCase().includes(search.toLowerCase())
+    const matchesStyle = !selectedStyle || p.style === selectedStyle
+    return matchesSearch && matchesStyle
   })
 
-  // Delete pattern
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => axios.delete(`/api/library/patterns/${id}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['library'] })
-      queryClient.invalidateQueries({ queryKey: ['library-stats'] })
-      setSelectedPattern(null)
-    },
-  })
+  // Get unique styles
+  const styles = [...new Set(presetsData.presets.map((p: PresetPattern) => p.style))]
 
-  // Toggle favorite
-  const favoriteMutation = useMutation({
-    mutationFn: (id: string) => axios.post(`/api/library/patterns/${id}/favorite`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['library'] })
-      queryClient.invalidateQueries({ queryKey: ['library-stats'] })
-    },
-  })
+  const handleSelectPattern = (preset: PresetPattern) => {
+    if (onPattern) {
+      const pattern: Pattern = {
+        metadata: preset.metadata,
+        events: preset.events.map(e => ({
+          channel: e.channel,
+          note: e.note,
+          velocity: e.velocity,
+        })),
+      }
+      onPattern(pattern)
+    }
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">📚 Pattern Library</h2>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
+        <h2 className="text-3xl font-bold mb-2">📚 Pattern Library</h2>
+        <p className="text-blue-100">{presetsData.total} preset patterns ready to use</p>
+      </div>
 
-      {/* Statistics */}
-      {stats && (
-        <div className="grid grid-cols-4 gap-4">
-          <div className="bg-blue-50 rounded p-3 text-center">
-            <p className="text-2xl font-bold text-blue-600">{stats.total_patterns}</p>
-            <p className="text-sm text-gray-600">Patterns</p>
-          </div>
-          <div className="bg-purple-50 rounded p-3 text-center">
-            <p className="text-2xl font-bold text-purple-600">{stats.favorites}</p>
-            <p className="text-sm text-gray-600">Favorites</p>
-          </div>
-          <div className="bg-green-50 rounded p-3 text-center">
-            <p className="text-2xl font-bold text-green-600">{stats.total_plays}</p>
-            <p className="text-sm text-gray-600">Total Plays</p>
-          </div>
-          <div className="bg-orange-50 rounded p-3 text-center">
-            <p className="text-lg font-bold text-orange-600">{Object.keys(stats.by_style).length}</p>
-            <p className="text-sm text-gray-600">Styles</p>
-          </div>
-        </div>
-      )}
-
-      {/* Filters */}
-      <div className="space-y-4">
+      {/* Search & Filters */}
+      <div className="bg-white rounded-lg shadow p-6 space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search patterns..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            placeholder="Search patterns by name or description..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Style</label>
-            <select
-              value={style || ''}
-              onChange={(e) => setStyle(e.target.value || null)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Styles</option>
-              {stats &&
-                Object.entries(stats.by_style).map(([s, count]) => (
-                  <option key={s} value={s}>
-                    {s} ({count})
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <label className="flex items-end gap-2 pb-2">
-            <input
-              type="checkbox"
-              checked={favoritesOnly}
-              onChange={(e) => setFavoritesOnly(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded"
-            />
-            <span className="text-sm font-medium text-gray-700">Favorites Only</span>
-          </label>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Style</label>
+          <select
+            value={selectedStyle || ''}
+            onChange={(e) => setSelectedStyle(e.target.value || null)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">All Styles</option>
+            {styles.map((style) => (
+              <option key={style} value={style}>
+                {style.charAt(0).toUpperCase() + style.slice(1)}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Patterns Grid */}
-      <div className="space-y-3">
-        {isLoading ? (
-          <p className="text-gray-500">Loading patterns...</p>
-        ) : libraryData.patterns.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No patterns found</p>
-        ) : (
-          libraryData.patterns.map((pattern: PatternItem) => (
+      {/* Presets Grid */}
+      {isLoading ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500">Loading presets...</p>
+        </div>
+      ) : filteredPresets.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-lg shadow">
+          <p className="text-gray-500">No patterns found matching your search</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredPresets.map((preset: PresetPattern) => (
             <div
-              key={pattern.id}
-              onClick={() => setSelectedPattern(pattern)}
-              className={`p-4 border rounded-lg cursor-pointer transition ${
-                selectedPattern?.id === pattern.id
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-blue-300'
-              }`}
+              key={preset.id}
+              className="bg-white rounded-lg shadow hover:shadow-lg transition p-4 space-y-3"
             >
-              <div className="flex justify-between items-start mb-2">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                    {pattern.name}
-                    {pattern.favorite && <span className="text-yellow-500">⭐</span>}
-                  </h3>
-                  <p className="text-sm text-gray-500">{pattern.description}</p>
-                </div>
+              {/* Pattern Info */}
+              <div>
+                <h3 className="font-bold text-gray-900">{preset.name}</h3>
+                <p className="text-sm text-gray-600">{preset.description}</p>
+              </div>
+
+              {/* Metadata */}
+              <div className="flex gap-2 text-xs">
+                <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                  {preset.style}
+                </span>
+                <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                  {preset.tempo} BPM
+                </span>
+                <span className="bg-green-100 text-green-700 px-2 py-1 rounded">
+                  {preset.metadata.num_events} events
+                </span>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-2 border-t border-gray-200">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    favoriteMutation.mutate(pattern.id)
-                  }}
-                  className="text-2xl hover:scale-110 transition"
+                  onClick={() => handleSelectPattern(preset)}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
                 >
-                  {pattern.favorite ? '⭐' : '☆'}
+                  📂 Load
+                </button>
+                <button
+                  onClick={() => handleSelectPattern(preset)}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition"
+                >
+                  🚀 Send
                 </button>
               </div>
-
-              <div className="flex flex-wrap gap-2 mb-2">
-                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                  {pattern.style}
-                </span>
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                  {pattern.tempo} BPM
-                </span>
-                {pattern.tags.map((tag) => (
-                  <span key={tag} className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <p className="text-xs text-gray-500">
-                {pattern.plays} plays • Created {new Date(pattern.created_at).toLocaleDateString()}
-              </p>
             </div>
-          ))
-        )}
-      </div>
-
-      {/* Pattern Actions */}
-      {selectedPattern && (
-        <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-          <h3 className="font-semibold text-gray-900">Actions</h3>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => {
-                console.log('Load pattern:', selectedPattern.id)
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition"
-            >
-              📂 Load
-            </button>
-            <button
-              onClick={() => {
-                console.log('Duplicate pattern:', selectedPattern.id)
-              }}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg transition"
-            >
-              📋 Duplicate
-            </button>
-            <button
-              onClick={() => {
-                console.log('Quick send:', selectedPattern.id)
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition"
-            >
-              🚀 Quick Send
-            </button>
-            <button
-              onClick={() => {
-                deleteMutation.mutate(selectedPattern.id)
-              }}
-              disabled={deleteMutation.isPending}
-              className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold py-2 rounded-lg transition"
-            >
-              🗑️ Delete
-            </button>
-          </div>
+          ))}
         </div>
       )}
+
+      {/* Summary */}
+      <div className="bg-gray-50 rounded-lg p-4 text-center text-sm text-gray-600">
+        Showing {filteredPresets.length} of {presetsData.total} patterns
+      </div>
     </div>
   )
 }

@@ -175,6 +175,28 @@ async def get_mappings():
     }
 
 
+@app.get("/api/v1/library/presets")
+async def get_presets():
+    """Get all preset patterns from JSON."""
+    import json
+    from pathlib import Path
+
+    presets_path = Path(__file__).parent.parent / "patterns" / "presets" / "standard_patterns.json"
+
+    if not presets_path.exists():
+        return {"presets": [], "total": 0}
+
+    try:
+        with open(presets_path, 'r') as f:
+            data = json.load(f)
+        return {
+            "presets": data.get("patterns", []),
+            "total": len(data.get("patterns", []))
+        }
+    except Exception as e:
+        return {"presets": [], "total": 0, "error": str(e)}
+
+
 # Serve React frontend
 frontend_path = Path(__file__).parent.parent / "frontend" / "dist"
 if frontend_path.exists():
