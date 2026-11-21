@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  rhythm-wolf:
+    build: .
+    image: rhythm-wolf:latest
+    container_name: rhythm-wolf-cli
+    # For MIDI access on macOS, need to mount /dev/null and allow device access
+    # On Linux, mount ALSA: /dev/snd
+    # On macOS with Docker Desktop, MIDI devices should be available
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./patterns:/app/patterns
+    # Uncomment for Linux ALSA support:
+    # devices:
+    #   - /dev/snd
