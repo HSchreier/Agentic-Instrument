@@ -255,6 +255,232 @@
         {"channel": 10, "note": 44, "velocity": 45, "step": 15},
         {"channel": 10, "note": 44, "velocity": 65, "step": 16}
       ]
+    },
+    {
+      "id": "preset_chicago_house_120",
+      "name": "Chicago House - 120 BPM Classic",
+      "style": "house",
+      "tempo": 120,
+      "template": "four_on_the_floor",
+      "category": "preset",
+      "description": "Legendary Chicago house sound: swing kick, funky snare rolls, iconic open hats",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "house",
+        "tempo": 120,
+        "num_events": 18
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 127, "step": 1},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 3},
+        {"channel": 10, "note": 38, "velocity": 100, "step": 4},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 5},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 6},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 7},
+        {"channel": 10, "note": 38, "velocity": 100, "step": 8},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 9},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 11},
+        {"channel": 10, "note": 38, "velocity": 100, "step": 12},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 13},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 14},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 15},
+        {"channel": 10, "note": 38, "velocity": 100, "step": 16}
+      ]
+    },
+    {
+      "id": "preset_berlin_techno_132",
+      "name": "Berlin Techno - 132 BPM",
+      "style": "techno",
+      "tempo": 132,
+      "template": "four_on_the_floor",
+      "category": "preset",
+      "description": "Iconic Berlin techno: industrial kick patterns, minimalist but hypnotic",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "techno",
+        "tempo": 132,
+        "num_events": 16
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 127, "step": 1},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 1},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 3},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 5},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 5},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 6},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 7},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 9},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 9},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 11},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 13},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 14},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 15},
+        {"channel": 10, "note": 44, "velocity": 55, "step": 16}
+      ]
+    },
+    {
+      "id": "preset_acid_house_125",
+      "name": "Acid House - 125 BPM",
+      "style": "house",
+      "tempo": 125,
+      "template": "four_on_the_floor",
+      "category": "preset",
+      "description": "Classic acid house: heavy kick, bouncy snare, funky hi-hat syncopation (TB-303 era)",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "house",
+        "tempo": 125,
+        "num_events": 20
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 127, "step": 1},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 3},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 4},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 5},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 6},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 7},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 8},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 9},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 11},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 12},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 13},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 14},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 15},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 16}
+      ]
+    },
+    {
+      "id": "preset_detroit_techno_120",
+      "name": "Detroit Techno - 120 BPM",
+      "style": "techno",
+      "tempo": 120,
+      "template": "four_on_the_floor",
+      "category": "preset",
+      "description": "Legendary Detroit sound: soulful kick, robot-like precision, hypnotic grooves (Juan Atkins era)",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "techno",
+        "tempo": 120,
+        "num_events": 16
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 127, "step": 1},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 3},
+        {"channel": 10, "note": 38, "velocity": 90, "step": 4},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 5},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 6},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 7},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 8},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 9},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 11},
+        {"channel": 10, "note": 38, "velocity": 90, "step": 12},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 13},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 14},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 15},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 16}
+      ]
+    },
+    {
+      "id": "preset_jungle_amen_break",
+      "name": "Jungle - Amen Break 170 BPM",
+      "style": "dnb",
+      "tempo": 170,
+      "template": "breakbeat",
+      "category": "preset",
+      "description": "Iconic Amen break pattern: fast breakbeats, rapid snares, dense hi-hats (legendary 1960s drum break resampled)",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "dnb",
+        "tempo": 170,
+        "num_events": 24
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 127, "step": 1},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 2},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 3},
+        {"channel": 10, "note": 38, "velocity": 100, "step": 4},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 5},
+        {"channel": 10, "note": 36, "velocity": 110, "step": 5},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 6},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 7},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 8},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 9},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 10},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 11},
+        {"channel": 10, "note": 38, "velocity": 100, "step": 12},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 13},
+        {"channel": 10, "note": 36, "velocity": 110, "step": 14},
+        {"channel": 10, "note": 44, "velocity": 70, "step": 15},
+        {"channel": 10, "note": 44, "velocity": 50, "step": 16}
+      ]
+    },
+    {
+      "id": "preset_ibiza_trance_130",
+      "name": "Ibiza Trance - 130 BPM",
+      "style": "tech_house",
+      "tempo": 130,
+      "template": "four_on_the_floor",
+      "category": "preset",
+      "description": "Golden age Ibiza: uplifting kick, euphoric snare, peak-time energy (legendary White Isle sound)",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "tech_house",
+        "tempo": 130,
+        "num_events": 18
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 127, "step": 1},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 2},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 3},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 4},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 5},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 6},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 7},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 8},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 9},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 10},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 11},
+        {"channel": 10, "note": 38, "velocity": 110, "step": 12},
+        {"channel": 10, "note": 36, "velocity": 127, "step": 13},
+        {"channel": 10, "note": 46, "velocity": 70, "step": 14},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 15},
+        {"channel": 10, "note": 44, "velocity": 60, "step": 16}
+      ]
+    },
+    {
+      "id": "preset_ambient_techno_110",
+      "name": "Ambient Techno - 110 BPM",
+      "style": "minimal",
+      "tempo": 110,
+      "template": "minimal",
+      "category": "preset",
+      "description": "Ethereal minimal: sparse meditative kick, atmospheric space (Brian Eno meets Richie Hawtin)",
+      "created_at": "2026-11-22T00:00:00",
+      "metadata": {
+        "style": "minimal",
+        "tempo": 110,
+        "num_events": 6
+      },
+      "events": [
+        {"channel": 10, "note": 36, "velocity": 110, "step": 1},
+        {"channel": 10, "note": 44, "velocity": 40, "step": 5},
+        {"channel": 10, "note": 36, "velocity": 110, "step": 9},
+        {"channel": 10, "note": 44, "velocity": 40, "step": 12},
+        {"channel": 10, "note": 36, "velocity": 110, "step": 13},
+        {"channel": 10, "note": 44, "velocity": 40, "step": 16}
+      ]
     }
   ]
 }
