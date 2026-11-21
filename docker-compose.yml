@@ -1,17 +1,48 @@
 version: '3.8'
 
 services:
-  rhythm-wolf:
+  # Frontend (React + Vite + Bun build)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rhythm-wolf-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    command: bun run dev
+
+  # Backend (FastAPI + Python CLI)
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: rhythm-wolf-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./patterns:/app/patterns
+      - ./rhythm_wolf:/app/rhythm_wolf
+      - ./backend:/app/backend
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+    # Uncomment for Linux ALSA support:
+    # devices:
+    #   - /dev/snd
+
+  # CLI (Optional: for testing CLI independently)
+  cli:
     build: .
     image: rhythm-wolf:latest
     container_name: rhythm-wolf-cli
-    # For MIDI access on macOS, need to mount /dev/null and allow device access
-    # On Linux, mount ALSA: /dev/snd
-    # On macOS with Docker Desktop, MIDI devices should be available
     stdin_open: true
     tty: true
     volumes:
       - ./patterns:/app/patterns
-    # Uncomment for Linux ALSA support:
-    # devices:
-    #   - /dev/snd
+    profiles:
+      - cli
