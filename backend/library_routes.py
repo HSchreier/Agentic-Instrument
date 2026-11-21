@@ -1,9 +1,15 @@
 """Pattern library API routes."""
 
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
 from rhythm_wolf.library import PatternLibrary, PatternMetadata
-from backend.main import Pattern
+from main import Pattern
 
 router = APIRouter(prefix="/api/v1/library", tags=["library"])
 library = PatternLibrary()
