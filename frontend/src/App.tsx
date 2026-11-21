@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { type Pattern } from './lib/api'
 import { PatternGenerator } from './components/PatternGenerator'
 import { DeviceSelector } from './components/DeviceSelector'
 import { PatternPreview } from './components/PatternPreview'
 import { PatternSender } from './components/PatternSender'
 
 export default function App() {
-  const [pattern, setPattern] = useState(null)
+  const [pattern, setPattern] = useState<Pattern | null>(null)
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null)
   const [isSending, setIsSending] = useState(false)
 
