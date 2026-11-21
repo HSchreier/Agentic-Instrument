@@ -4,11 +4,14 @@ import { PatternGenerator } from './components/PatternGenerator'
 import { DeviceSelector } from './components/DeviceSelector'
 import { PatternPreview } from './components/PatternPreview'
 import { PatternSender } from './components/PatternSender'
+import { PatternLibrary } from './components/PatternLibrary'
+import { ChatInterface } from './components/ChatInterface'
 
 export default function App() {
   const [pattern, setPattern] = useState<Pattern | null>(null)
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null)
   const [isSending, setIsSending] = useState(false)
+  const [activeTab, setActiveTab] = useState<'generator' | 'library' | 'chat'>('generator')
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rhythm-50 to-blue-50">
@@ -27,36 +30,93 @@ export default function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: Generator */}
-          <div className="lg:col-span-1">
-            <PatternGenerator onGenerate={setPattern} />
-          </div>
-
-          {/* Center: Preview */}
-          <div className="lg:col-span-1">
-            {pattern ? (
-              <PatternPreview pattern={pattern} />
-            ) : (
-              <div className="bg-white rounded-lg shadow p-6 text-center text-gray-400">
-                <p>Generate a pattern to preview</p>
-              </div>
-            )}
-          </div>
-
-          {/* Right: Send */}
-          <div className="lg:col-span-1 space-y-6">
-            <DeviceSelector onSelect={setSelectedDevice} />
-            {pattern && selectedDevice && (
-              <PatternSender
-                pattern={pattern}
-                device={selectedDevice}
-                isLoading={isSending}
-                onStatusChange={setIsSending}
-              />
-            )}
-          </div>
+        {/* Tabs */}
+        <div className="flex gap-4 mb-8 border-b border-gray-200">
+          {(['generator', 'library', 'chat'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-6 py-3 font-semibold transition ${
+                activeTab === tab
+                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {tab === 'generator' && '✨ Generate'}
+              {tab === 'library' && '📚 Library'}
+              {tab === 'chat' && '💬 Chat'}
+            </button>
+          ))}
         </div>
+
+        {/* Generator Tab */}
+        {activeTab === 'generator' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left: Generator */}
+            <div className="lg:col-span-1">
+              <PatternGenerator onGenerate={setPattern} />
+            </div>
+
+            {/* Center: Preview */}
+            <div className="lg:col-span-1">
+              {pattern ? (
+                <PatternPreview pattern={pattern} />
+              ) : (
+                <div className="bg-white rounded-lg shadow p-6 text-center text-gray-400">
+                  <p>Generate a pattern to preview</p>
+                </div>
+              )}
+            </div>
+
+            {/* Right: Send */}
+            <div className="lg:col-span-1 space-y-6">
+              <DeviceSelector onSelect={setSelectedDevice} />
+              {pattern && selectedDevice && (
+                <PatternSender
+                  pattern={pattern}
+                  device={selectedDevice}
+                  isLoading={isSending}
+                  onStatusChange={setIsSending}
+                />
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Library Tab */}
+        {activeTab === 'library' && (
+          <PatternLibrary
+            onPattern={setPattern}
+            onSave={(p) => {
+              setPattern(p)
+              setActiveTab('generator')
+            }}
+            onSend={(p) => {
+              setPattern(p)
+              setActiveTab('generator')
+            }}
+          />
+        )}
+
+        {/* Chat Tab */}
+        {activeTab === 'chat' && (
+          <div className="max-w-2xl mx-auto">
+            <ChatInterface
+              onPattern={(p) => {
+                setPattern(p)
+                setActiveTab('generator')
+              }}
+              onSave={(p) => {
+                setPattern(p)
+                setActiveTab('generator')
+              }}
+              onSend={(p) => {
+                setPattern(p)
+                setActiveTab('generator')
+              }}
+            />
+          </div>
+        )}
       </main>
 
       {/* Footer */}
