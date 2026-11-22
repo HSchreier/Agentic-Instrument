@@ -138,9 +138,9 @@ Claude gains better understanding for:
 4. **Compression** — Store tokens instead of full patterns
 5. **Pattern morphing** — Interpolate between pattern embeddings
 
-## 🧪 Experimental: Prime Factorization + Signal Processing (Roadmap)
+## 🧪 Experimental: Prime Factorization + Signal Processing (PoC)
 
-**Status:** Planned for v2.0+
+**Status:** PoC Ready — See [PRIME_FACTORIZATION_POC.md](./PRIME_FACTORIZATION_POC.md)
 
 Hybrid approach: Prime factorization semantics + FFT/Gaussian vectorization for efficiency.
 
