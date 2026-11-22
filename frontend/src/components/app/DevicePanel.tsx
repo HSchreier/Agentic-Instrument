@@ -1,8 +1,7 @@
 import { RefreshCw } from 'lucide-react'
 import { useStore } from '@/state/store'
-import { Button, IconButton } from '@/components/ui/Button'
+import { IconButton } from '@/components/ui/Button'
 import { Tag } from '@/components/ui/Tag'
-import { Led } from '@/components/hw/Led'
 
 export function DevicePanel() {
   const { deviceState, ports, selectedPort, setSelectedPort, scanning, setScanningDevices } = useStore()

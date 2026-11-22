@@ -16,7 +16,6 @@ export function GenerateView() {
     setBpm,
     bass,
     setBass,
-    seed,
     setSeed,
     pattern,
     setPattern,

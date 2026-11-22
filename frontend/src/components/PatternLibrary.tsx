@@ -45,7 +45,7 @@ export function PatternLibrary({ onPattern, onSend }: PatternLibraryProps) {
   })
 
   // Get unique styles
-  const styles = [...new Set(presetsData.presets.map((p: PresetPattern) => p.style))]
+  const styles: string[] = Array.from(new Set(presetsData.presets.map((p: PresetPattern) => p.style))) as string[]
 
   const handleSelectPattern = (preset: PresetPattern) => {
     const pattern: Pattern = {
@@ -104,7 +104,7 @@ export function PatternLibrary({ onPattern, onSend }: PatternLibraryProps) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Styles</option>
-            {styles.map((style) => (
+            {styles.map((style: string) => (
               <option key={style} value={style}>
                 {style.charAt(0).toUpperCase() + style.slice(1)}
               </option>

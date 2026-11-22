@@ -2,11 +2,10 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useStore } from '@/state/store'
-import { generate, eventCount, density, STYLES } from '@/lib/pattern'
+import { generate, eventCount } from '@/lib/pattern'
 import { Button } from '@/components/ui/Button'
 import { MiniGrid } from '@/components/hw/MiniGrid'
 import { DensityMeter } from '@/components/hw/DensityMeter'
-import { Star } from 'lucide-react'
 
 interface Preset {
   id: string
@@ -34,7 +33,7 @@ export function LibraryView() {
 
   const styles = useMemo(() => {
     const unique = new Set(presets.map((p: Preset) => p.style))
-    return Array.from(unique).sort()
+    return Array.from(unique).sort() as string[]
   }, [presets])
 
   const filtered = useMemo(() => {
@@ -104,7 +103,7 @@ export function LibraryView() {
         />
 
         <div className="flex gap-2 flex-wrap">
-          {['All', ...styles].map((s) => (
+          {['All', ...styles].map((s: string) => (
             <button
               key={s}
               onClick={() => setFilter(s)}

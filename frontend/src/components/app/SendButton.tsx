@@ -32,8 +32,10 @@ export function SendButton() {
     setSendProgress(0)
 
     // Simulate send progress
+    let currentProgress = 0
     const interval = setInterval(() => {
-      setSendProgress((p) => Math.min(p + Math.random() * 20, 90))
+      currentProgress = Math.min(currentProgress + Math.random() * 20, 90)
+      setSendProgress(currentProgress)
     }, 100)
 
     // Simulate send completion

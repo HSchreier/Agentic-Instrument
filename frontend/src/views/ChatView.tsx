@@ -148,7 +148,7 @@ export function ChatView() {
                 </div>
 
                 <MiniGrid
-                  pattern={generate(msg.pattern.style as any, 'Main', false, msg.pattern.seed)}
+                  pattern={generate(msg.pattern.style as any, 'Four on the Floor', false, msg.pattern.seed)}
                   cellSize={6}
                 />
 
