@@ -34,14 +34,6 @@ export function patternToTokens(pattern: Pattern): BeatToken[] {
       const velocity = pattern[voice][step]
 
       if (velocity > 0) {
-        const voiceNames = Object.entries(VOICE_TOKENS).find(
-          ([_, v]) => Object.keys(v)[0]
-        )?.[0]
-
-        const tokenKey = Object.entries(VOICE_TOKENS).find(
-          ([idx]) => Object.values(VOICE_TOKENS).indexOf(VOICE_TOKENS[idx as keyof typeof VOICE_TOKENS])
-        )
-
         // Map voice index to token
         const voiceTokens = Object.values(VOICE_TOKENS)[voice]
         tokens.push(voiceTokens.on as BeatToken)
