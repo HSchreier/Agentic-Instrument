@@ -23,7 +23,7 @@ interface PatternLibraryProps {
   onSend?: (pattern: Pattern) => void
 }
 
-export function PatternLibrary({ onPattern }: PatternLibraryProps) {
+export function PatternLibrary({ onPattern, onSend }: PatternLibraryProps) {
   const [search, setSearch] = useState('')
   const [selectedStyle, setSelectedStyle] = useState<string | null>(null)
 
@@ -31,7 +31,7 @@ export function PatternLibrary({ onPattern }: PatternLibraryProps) {
   const { data: presetsData = { presets: [], total: 0 }, isLoading } = useQuery({
     queryKey: ['presets'],
     queryFn: async () => {
-      const { data } = await axios.get('/api/v1/library/presets')
+      const { data } = await axios.get('/api/library/presets')
       return data
     },
   })
@@ -48,16 +48,30 @@ export function PatternLibrary({ onPattern }: PatternLibraryProps) {
   const styles = [...new Set(presetsData.presets.map((p: PresetPattern) => p.style))]
 
   const handleSelectPattern = (preset: PresetPattern) => {
+    const pattern: Pattern = {
+      metadata: preset.metadata,
+      events: preset.events.map(e => ({
+        channel: e.channel,
+        note: e.note,
+        velocity: e.velocity,
+      })),
+    }
     if (onPattern) {
-      const pattern: Pattern = {
-        metadata: preset.metadata,
-        events: preset.events.map(e => ({
-          channel: e.channel,
-          note: e.note,
-          velocity: e.velocity,
-        })),
-      }
       onPattern(pattern)
+    }
+  }
+
+  const handleSendPattern = (preset: PresetPattern) => {
+    const pattern: Pattern = {
+      metadata: preset.metadata,
+      events: preset.events.map(e => ({
+        channel: e.channel,
+        note: e.note,
+        velocity: e.velocity,
+      })),
+    }
+    if (onSend) {
+      onSend(pattern)
     }
   }
 
@@ -143,7 +157,7 @@ export function PatternLibrary({ onPattern }: PatternLibraryProps) {
                   📂 Load
                 </button>
                 <button
-                  onClick={() => handleSelectPattern(preset)}
+                  onClick={() => handleSendPattern(preset)}
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition"
                 >
                   🚀 Send

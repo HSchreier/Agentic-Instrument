@@ -1,135 +1,40 @@
-import { useState } from 'react'
-import { type Pattern } from './lib/api'
-import { PatternGenerator } from './components/PatternGenerator'
-import { DeviceSelector } from './components/DeviceSelector'
-import { PatternPreview } from './components/PatternPreview'
-import { PatternSender } from './components/PatternSender'
-import { PatternLibrary } from './components/PatternLibrary'
-import { ChatInterface } from './components/ChatInterface'
+import { useStore } from '@/state/store'
+import { Header } from '@/components/app/Header'
+import { ToastHost } from '@/components/ui/Toast'
+import { DevicePanel } from '@/components/app/DevicePanel'
+import { LoadedPattern } from '@/components/app/LoadedPattern'
+import { SendButton } from '@/components/app/SendButton'
+import { GenerateView } from '@/views/GenerateView'
+import { LibraryView } from '@/views/LibraryView'
+import { ChatView } from '@/views/ChatView'
 
 export default function App() {
-  const [pattern, setPattern] = useState<Pattern | null>(null)
-  const [selectedDevice, setSelectedDevice] = useState<string | null>(null)
-  const [isSending, setIsSending] = useState(false)
-  const [activeTab, setActiveTab] = useState<'generator' | 'library' | 'chat'>('generator')
+  const { tab, toasts, removeToast } = useStore()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rhythm-50 to-blue-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">🎹</span>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Rhythm Wolf MIDI</h1>
-              <p className="text-sm text-gray-500">Generate and send drum patterns to your hardware</p>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-bg">
+      <Header />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gray-200">
-          {(['generator', 'library', 'chat'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 font-semibold transition ${
-                activeTab === tab
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {tab === 'generator' && '✨ Generate'}
-              {tab === 'library' && '📚 Library'}
-              {tab === 'chat' && '💬 Chat'}
-            </button>
-          ))}
+      <main className="flex desktop:flex-row tablet:flex-col-reverse min-h-[calc(100vh-56px)]">
+        {/* Main content area */}
+        <div className="flex-1 overflow-auto">
+          {tab === 'Generate' && <GenerateView />}
+          {tab === 'Library' && <LibraryView />}
+          {tab === 'Chat' && <ChatView />}
         </div>
 
-        {/* Generator Tab */}
-        {activeTab === 'generator' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left: Generator */}
-            <div className="lg:col-span-1">
-              <PatternGenerator onGenerate={setPattern} />
-            </div>
-
-            {/* Center: Preview */}
-            <div className="lg:col-span-1">
-              {pattern ? (
-                <PatternPreview pattern={pattern} />
-              ) : (
-                <div className="bg-white rounded-lg shadow p-6 text-center text-gray-400">
-                  <p>Generate a pattern to preview</p>
-                </div>
-              )}
-            </div>
-
-            {/* Right: Send */}
-            <div className="lg:col-span-1 space-y-6">
-              <DeviceSelector onSelect={setSelectedDevice} />
-              {pattern && selectedDevice && (
-                <PatternSender
-                  pattern={pattern}
-                  device={selectedDevice}
-                  isLoading={isSending}
-                  onStatusChange={setIsSending}
-                />
-              )}
-            </div>
+        {/* Device rail - persistent on desktop, top on tablet */}
+        <aside className="desktop:w-80 desktop:border-l-rule desktop:border-l-rule tablet:w-full tablet:border-b-rule tablet:border-b-rule bg-surface p-6 overflow-y-auto">
+          <div className="space-y-6 flex flex-col">
+            <DevicePanel />
+            <LoadedPattern />
+            <SendButton />
           </div>
-        )}
-
-        {/* Library Tab */}
-        {activeTab === 'library' && (
-          <PatternLibrary
-            onPattern={setPattern}
-            onSave={(p) => {
-              setPattern(p)
-              setActiveTab('generator')
-            }}
-            onSend={(p) => {
-              setPattern(p)
-              setActiveTab('generator')
-            }}
-          />
-        )}
-
-        {/* Chat Tab */}
-        {activeTab === 'chat' && (
-          <div className="max-w-2xl mx-auto">
-            <ChatInterface
-              onPattern={(p) => {
-                setPattern(p)
-                setActiveTab('generator')
-              }}
-              onSave={(p) => {
-                setPattern(p)
-                setActiveTab('generator')
-              }}
-              onSend={(p) => {
-                setPattern(p)
-                setActiveTab('generator')
-              }}
-            />
-          </div>
-        )}
+        </aside>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-20 py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center text-sm text-gray-400">
-          <p>Built with React + TypeScript + Tailwind CSS</p>
-          <p className="mt-2">
-            <a href="https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre" className="hover:text-white">
-              GitHub Repository
-            </a>
-          </p>
-        </div>
-      </footer>
+      {/* Toast notifications */}
+      <ToastHost toasts={toasts} onRemoveToast={removeToast} />
     </div>
   )
 }

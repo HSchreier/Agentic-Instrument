@@ -1,27 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply scroll-smooth;
+  html, body {
+    min-width: 768px;
   }
 
   body {
-    @apply bg-white;
+    @apply bg-bg text-ink font-sans;
+  }
+
+  *:focus-visible {
+    outline: 2px solid #ec3013;
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    @apply bg-accent-300;
+  }
+
+  [disabled] {
+    @apply opacity-45 cursor-not-allowed;
   }
 }
 
 @layer components {
+  /* Button variants */
+  .btn {
+    @apply inline-flex items-center justify-start px-4 py-3 font-semibold text-sm leading-none transition;
+    @apply border-rule border-ink;
+  }
+
   .btn-primary {
-    @apply px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition;
+    @apply bg-accent text-white;
+  }
+
+  .btn-primary:hover:not([disabled]) {
+    @apply bg-accent-600;
   }
 
   .btn-secondary {
-    @apply px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition;
+    @apply bg-bg text-ink border-rule border-ink;
   }
 
-  .card {
-    @apply bg-white rounded-lg shadow p-6;
+  .btn-secondary:hover:not([disabled]) {
+    @apply bg-surface;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-ink border-transparent;
+  }
+
+  .btn-ghost:hover:not([disabled]) {
+    @apply bg-surface;
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center p-2 w-auto;
+  }
+
+  .btn-block {
+    @apply w-full;
+  }
+
+  /* Tags */
+  .tag {
+    @apply inline-flex items-center px-2 py-1 text-xs font-semibold tracking-wide uppercase;
+    @apply rounded-none;
+  }
+
+  .tag-accent {
+    @apply bg-accent text-white;
+  }
+
+  .tag-neutral {
+    @apply bg-neutral-300 text-ink;
+  }
+
+  .tag-outline {
+    @apply bg-transparent border-rule border-ink text-ink;
+  }
+
+  /* Form controls */
+  .input {
+    @apply w-full px-3 py-2 border-rule border-ink bg-bg text-ink;
+    @apply focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent;
+  }
+
+  .input::placeholder {
+    @apply text-neutral-400;
+  }
+
+  /* Dialog */
+  .dialog-backdrop {
+    @apply fixed inset-0 bg-black/40 flex items-center justify-center;
+  }
+
+  .dialog {
+    @apply bg-bg border-rule border-ink shadow-lg;
+    @apply max-w-md w-full mx-4;
+  }
+
+  .dialog-title {
+    @apply text-lg font-bold;
+  }
+
+  .dialog-body {
+    @apply text-sm;
+  }
+
+  .dialog-actions {
+    @apply flex gap-2 justify-end;
+  }
+
+  /* Kicker label */
+  .kicker {
+    @apply text-xs font-bold uppercase tracking-wider text-ink mb-2;
+  }
+
+  /* 2px divider rule */
+  .rule {
+    @apply border-rule border-divider;
+  }
+
+  /* Step pad styling */
+  .step-pad {
+    @apply relative overflow-hidden transition-colors;
+  }
+
+  .step-pad.group-1 {
+    @apply bg-neutral-700;
+  }
+
+  .step-pad.group-2 {
+    @apply bg-neutral-800;
+  }
+
+  .step-pad.group-3 {
+    @apply bg-neutral-700;
+  }
+
+  .step-pad.group-4 {
+    @apply bg-neutral-800;
+  }
+
+  .step-pad:hover {
+    @apply bg-neutral-600;
+  }
+
+  .step-pad-fill {
+    @apply absolute bottom-1 inset-x-1 bg-accent transition-all;
+  }
+
+  /* Button active state */
+  .btn:active:not([disabled]) {
+    transform: translateY(1px);
+  }
+
+  /* Send button animation */
+  .btn-send {
+    @apply active:scale-95 transition-transform;
+  }
+
+  /* Loading spinner */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Progress bar animation */
+  @keyframes progress-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .progress-animate {
+    animation: progress-pulse 0.5s ease-in-out;
+  }
+
+  /* Fade in animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+
+  /* Slide in from right */
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in-right 0.3s ease-out;
+  }
+
+  /* Toast notification animation */
+  .toast-enter {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  .toast-exit {
+    animation: fade-in 0.3s ease-out reverse;
   }
 }
