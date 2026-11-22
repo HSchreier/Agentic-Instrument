@@ -1,5 +1,8 @@
 # Rhythm Wolf MIDI Toolkit — Roadmap
 
+> **Strategic Vision**: From single-device tool → open protocol for agentic musical instruments  
+> See: [AGENTIC_INSTRUMENTS_VISION.md](docs/AGENTIC_INSTRUMENTS_VISION.md)
+
 ## v1.0 (Current - Released) ✅
 
 ### Phases Completed
@@ -41,46 +44,63 @@
 
 ---
 
-## v2.0 (Mid-term - Q2 2025)
+## v2.0 (Mid-term - Q2 2025) — **Generalize for Any Instrument**
 
-### Advanced AI
-- 🤖 Real Claude API integration (replace simulation)
-- 🤖 Multi-turn pattern refinement
-- 🤖 Style transfer (convert patterns between genres)
-- 🤖 Beat description → MIDI understanding via tokenizer
+### 🎯 Core: Open Protocol
 
-### ML & Analysis
-- 📊 Pattern clustering using embeddings
-- 📊 Recommendation engine ("you might like...")
-- 📊 ML model fine-tuning on user patterns
-- 📊 Fingerprint-based deduplication
+- 📋 **InstrumentAdapter Interface** — Standardized device abstraction
+  - Abstract pattern format (device-agnostic)
+  - Connect/disconnect/send/read operations
+  - Device capability discovery
+  
+- 🧠 **AgenticInstrument Framework** — Unified AI + hardware
+  - Semantic describe/fromDescription
+  - Pattern mutation & interpolation
+  - Claude integration (pluggable backends)
+  
+- 🛠️ **Developer SDK** (npm package)
+  - `@agentic-instruments/adapter-kit` for hardware developers
+  - `@agentic-instruments/ai-kit` for AI backend makers
+  - Comprehensive documentation + examples
 
-### Hardware
-- 🔌 Multi-device support (Volca, Elektron, etc.)
-- 🔌 Parameter learning from hardware
-- 🔌 Bi-directional sync (read patterns from device)
+### 📱 Reference Implementations
+
+- ✅ **Rhythm Wolf Adapter** (v1 ported to new interface)
+- 🆕 **Volca Keys Adapter** (pitched synth proof of concept)
+- 🆕 **Example Local LLM Backend** (Ollama integration)
+
+### 🌐 Community Infrastructure
+
+- 📦 **GitHub Organization**: `agentic-instruments`
+- 📚 **Documentation**: Adapter dev guide (60min), API reference
+- 🏪 **Registry Website**: Discover adapters & AI backends
+- 💬 **Developer Community**: Discord/forum launch
 
 ---
 
-## v3.0 (Long-term - Q3+ 2025)
+## v3.0 (Long-term - Q3+ 2025) — **Ecosystem Maturity**
 
-### Community
-- 👥 Pattern sharing & discovery
-- 👥 Remix chains (modify then share)
-- 👥 Collaborative sessions
-- 👥 Public pattern leaderboard
+### 🌍 Network Effects
 
-### Generative
-- 🎵 Procedural variations (mutate existing patterns)
-- 🎵 Cross-genre synthesis
-- 🎵 Live looping with pattern sequencing
-- 🎵 Audio-reactive pattern generation
+- 👥 **Community Adapters** (10+ for Volca, Elektron, Nord, OP-Z, etc.)
+- 🤖 **Alternative AI Backends** (Claude, local LLM, Music LM, fine-tuned models)
+- 📚 **Pattern Sharing** (global library, remix chains, collaborations)
+- 🏆 **Leaderboard** (most-used adapters, trending patterns, top contributors)
 
-### Production
-- 🎚️ Full track composition (drums + synth patterns)
-- 🎚️ Arrangement automation
-- 🎚️ Export to DAW (Ableton, Logic, etc.)
-- 🎚️ VST plugin version
+### 🎓 Adoption & Partnerships
+
+- 🏫 **Education**: University partnerships, music tech curricula
+- 🏢 **Enterprise**: Studio fleet management, licensing
+- 🎹 **Hardware OEMs**: "Agentic Instruments Ready" badge program
+- 🔬 **Research**: ML training on semantic music patterns
+
+### 🎵 Advanced Features
+
+- 🎚️ **Full Track Composition** (drums + synth + bass patterns coordinated)
+- 🎵 **Cross-device Sync** (patterns orchestrated across multiple instruments)
+- 🎞️ **Arrangement Automation** (AI suggests song structure)
+- 🎙️ **Audio-Reactive Generation** (patterns respond to audio input)
+- 📤 **DAW Export** (Ableton, Logic, Reaper via OSC/MIDI)
 
 ---
 
