@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FRythm--Wolf--Midi--PAtchre-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre)
+[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FRhythm--Wolf--MIDI--Toolkit-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)](https://hub.docker.com)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://python.org)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://react.dev)
@@ -47,8 +47,8 @@
 
 ```bash
 # Clone & navigate
-git clone https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre.git
-cd Rythm-Wolf-Midi-PAtchre
+git clone https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit.git
+cd Rhythm-Wolf-MIDI-Toolkit
 git checkout dev
 
 # Build the image
@@ -153,7 +153,6 @@ The app features a professional web UI designed by Claude Design, with a hardwar
 ### Visual Guide - Three Main Tabs
 
 #### ✨ Generate Tab: Pattern Editor with 16-Step Sequencer
-![Generate View - Create and edit MIDI patterns with hardware-inspired controls](docs/screenshots/generate-view.png)
 
 The Generate tab provides a comprehensive workspace for pattern creation:
 - **Left Panel:** Style selection (Techno, House, Tech House, Minimal, D&B), tempo knob with LCD display, template selection, bass synth toggle
@@ -161,8 +160,33 @@ The Generate tab provides a comprehensive workspace for pattern creation:
 - **Right Panel:** Device rail with MIDI output selector, loaded pattern display, send button with estimated time
 - **Bottom:** Undo/Clear/Re-roll buttons with pattern name display
 
+```
+┌──────────────────────────────────────────────────────────┐
+│  GENERATE                                           🔴   │
+├──────────────────────────────────────────────────────────┤
+│  Style │ Techno      Tempo │ 130    │ Device Rail     │
+│        │ House              │ BPM    │ ─────────────   │
+│        │ Tech House    ▼    │        │ MIDI Output     │
+│        │ Minimal                     │ [Select device] │
+│  Template │ Four on the Floor       │ 🔄 Refresh      │
+│          │ Half Time                │ ─────────────   │
+│          │ Minimal            ▼     │ Loaded Pattern  │
+│  Bass ▼ OFF                         │ Untitled        │
+│        ▼                             │ 0 events        │
+├────────────────────────────────────────────────────────┤
+│  STEP  │ 0  1  2  3  4  5  6  7...  │ Est. 1 seconds │
+│  KICK  │ ■  □  ■  □  ■  □  ■  □    │ [Send 0 Events]│
+│  SNARE │ □  ■  □  ■  □  ■  □  ■    │                │
+│  PERC  │ □  □  ■  □  □  □  ■  □    │                │
+│  OPEN  │ □  □  □  ■  □  □  □  ■    │                │
+│  CLOSE │ ■  □  ■  □  ■  □  ■  □    │                │
+│  BASS  │ □  □  □  □  □  □  □  □    │                │
+├────────────────────────────────────────────────────────┤
+│ [Undo] [Clear] [Re-roll] Untitled Pattern         │
+└────────────────────────────────────────────────────────┘
+```
+
 #### 📚 Library Tab: Preset Browser with Search & Filter
-![Library View - Browse, search, and load preset patterns](docs/screenshots/library-view.png)
 
 The Library tab showcases all 15 industry-standard presets:
 - **Search:** Find patterns by name or description
@@ -171,8 +195,31 @@ The Library tab showcases all 15 industry-standard presets:
 - **Cards:** Each preset shows mini-grid preview, event count, density meter, and Load/Send buttons
 - **Favorites:** Star icon to save frequently-used patterns
 
-#### 💬 Chat Tab: Natural Language Pattern Generation  
-![Chat View - Describe patterns in plain English, powered by Claude AI](docs/screenshots/chat-view.png)
+```
+┌──────────────────────────────────────────────────────────┐
+│  LIBRARY                                          🔴   │
+├──────────────────────────────────────────────────────────┤
+│ [Search patterns...]                                     │
+│ [All] [DNB] [House] [Minimal] [Tech House] [Techno]    │
+│ Sort: [Name ▼]                                          │
+│                                                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
+│  │ Acid House  │  │ Ambient     │  │ Berlin      │    │
+│  │ 125 BPM     │  │ Techno      │  │ Techno      │    │
+│  │ ■ ■ ■ ■    │  │ ■   ■       │  │ ■ ■ ■ ■    │    │
+│  │ [Load][Send]│  │ [Load][Send]│  │ [Load][Send]│    │
+│  └─────────────┘  └─────────────┘  └─────────────┘    │
+│                                                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
+│  │ Deep House  │  │ Electro     │  │ Minimal...  │    │
+│  │ 120 BPM     │  │ 128 BPM     │  │             │    │
+│  │ ■   ■       │  │ ■ ■ ■       │  │ ■           │    │
+│  │ [Load][Send]│  │ [Load][Send]│  │ [Load][Send]│    │
+│  └─────────────┘  └─────────────┘  └─────────────┘    │
+└──────────────────────────────────────────────────────────┘
+```
+
+#### 💬 Chat Tab: Natural Language Pattern Generation
 
 The Chat tab enables creative pattern generation through conversation:
 - **Message List:** View Claude's responses with generated pattern previews
@@ -180,6 +227,34 @@ The Chat tab enables creative pattern generation through conversation:
 - **Input Bar:** Describe your pattern idea; press Enter or click send
 - **Pattern Blocks:** Each response includes a mini-grid preview and "Use Pattern" button to load into editor
 - **Responsive:** Works on desktop and tablet with smooth scrolling
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  CHAT                                              🔴   │
+├──────────────────────────────────────────────────────────┤
+│  💬 Pattern Generator                                   │
+│  Describe your pattern idea and I'll generate it        │
+│                                                          │
+│  Claude: "Hey! I can help you generate MIDI patterns   │
+│  using natural language..."                             │
+│                                                          │
+│  Try something:                                         │
+│  [🎹 Upbeat melodic pattern...]                        │
+│  [🥁 Minimal techno kick drum...]                      │
+│                                                          │
+│  You: "deep house groove"                              │
+│                                                          │
+│  Claude: "I've created a Deep House pattern at         │
+│  120 BPM with 16 events..."                            │
+│  ┌─────────────────────────────────────┐              │
+│  │ Deep House - 120 BPM                │              │
+│  │ ■   ■       ■       ■               │              │
+│  │ [📂 Use Pattern]                    │              │
+│  └─────────────────────────────────────┘              │
+│                                                          │
+│  [Describe a pattern idea...] [➤]                      │
+└──────────────────────────────────────────────────────────┘
+```
 
 **Reference:** [See the full design mockups](design_handoff_rhythm_wolf_midi/Rhythm%20Wolf%20MIDI.dc.html) (open in browser from the design handoff folder)
 
@@ -1047,4 +1122,4 @@ MIT License – See [LICENSE](LICENSE) for details.
 
 ## 🎵 Made with ❤️ for Rhythm Wolf users
 
-Questions? Open an issue on [GitHub](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/issues).
+Questions? Open an issue on [GitHub](https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit/issues).

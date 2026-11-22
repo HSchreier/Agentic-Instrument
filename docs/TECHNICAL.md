@@ -283,8 +283,8 @@ Send pattern to Rhythm Wolf in real-time.
 
 ```bash
 # Clone & enter directory
-git clone https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre.git
-cd Rythm-Wolf-Midi-PAtchre
+git clone https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit.git
+cd Rhythm-Wolf-MIDI-Toolkit
 git checkout dev
 
 # Option 1: Docker (recommended)

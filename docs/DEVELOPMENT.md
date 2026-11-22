@@ -12,8 +12,8 @@
 ### Local Setup (Docker)
 
 ```bash
-git clone https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre.git
-cd Rythm-Wolf-Midi-PAtchre
+git clone https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit.git
+cd Rhythm-Wolf-MIDI-Toolkit
 git checkout dev
 
 # Build the container
@@ -335,6 +335,6 @@ docs(api): Update OpenAPI spec for v0.2
 
 ## Questions or Issues?
 
-Open an issue on [GitHub Issues](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/issues).
+Open an issue on [GitHub Issues](https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit/issues).
 
 Happy coding! 🎵
