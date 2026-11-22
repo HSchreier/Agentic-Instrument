@@ -18,50 +18,23 @@
 🚀 **New:** Professional web UI with hardware-inspired faceplate design, 16-step sequencer, and Claude integration!  
 ✨ **Status:** ✅ **All phases complete!** Phases 1-9: Foundation, Web UI, Device Rail & Send, Library, Chat, Polish animations.
 
-## 📸 App in Action
+---
 
-**Three powerful tabs for complete MIDI workflow:**
+## 📸 Live Screenshots
 
-```
-┌─── GENERATE TAB ──────────────────────────────────────────┐
-│ Left: Style (Techno, House...) | Tempo | Template | Bass │
-│ Center: 6×16 Sequencer Grid with draggable pads           │
-│ Right: Device Rail (selector, status, send button)        │
-│ Bottom: Controls (Undo, Clear, Re-roll)                   │
-└───────────────────────────────────────────────────────────┘
+### Generate Tab – Pattern Editor with 16-Step Sequencer
+![Generate Tab - Create and edit MIDI patterns with hardware-inspired controls](docs/screenshots/01-generate.png)
+Create patterns with style/tempo/template controls, drag pads on the 6×16 sequencer grid, and send to device in real-time.
 
-┌─── LIBRARY TAB ───────────────────────────────────────────┐
-│ [Search...] [Filter: All|DNB|House|...] [Sort: Name ▼]   │
-│                                                            │
-│ ┌─────────────────┐ ┌──────────────┐ ┌──────────────┐    │
-│ │ Acid House      │ │ Ambient Tech │ │ Berlin Tech  │    │
-│ │ 125 BPM    ☆    │ │ 110 BPM  ☆   │ │ 132 BPM  ☆   │    │
-│ │ ████░░░░░░░░░░  │ │ ██░░░░░░░░░░ │ │ ███████░░░░░ │    │
-│ │ [Load][Send]    │ │ [Load][Send] │ │ [Load][Send] │    │
-│ └─────────────────┘ └──────────────┘ └──────────────┘    │
-└───────────────────────────────────────────────────────────┘
+### Library Tab – Browse & Filter 15 Presets
+![Library Tab - Browse, search, and load preset patterns](docs/screenshots/02-library.png)
+Search patterns by name, filter by style (Techno, House, Minimal, etc.), sort by tempo, and load/send with one click.
 
-┌─── CHAT TAB ──────────────────────────────────────────────┐
-│ 💬 "Describe your pattern idea and I'll generate it"      │
-│                                                            │
-│ Claude: "Hey! I can help you generate MIDI patterns..."   │
-│                                                            │
-│ [🎹 Upbeat melodic...] [🥁 Minimal techno...]            │
-│                                                            │
-│ You: "deep house groove"                                  │
-│                                                            │
-│ Claude: "I've created a Deep House pattern at 120 BPM..  │
-│ ┌──────────────────────────────────┐                     │
-│ │ Deep House - 120 BPM             │                     │
-│ │ ████░░░░░░░░░░░░░░░░░░░░░░░░░░░ │                     │
-│ │ [📂 Use Pattern]                 │                     │
-│ └──────────────────────────────────┘                     │
-│                                                            │
-│ [Describe a pattern...] [➤]                              │
-└───────────────────────────────────────────────────────────┘
-```
+### Chat Tab – Natural Language Pattern Generation
+![Chat Tab - Describe patterns in plain English, powered by Claude AI](docs/screenshots/03-chat.png)
+Type what you want ("deep house groove"), Claude generates MIDI patterns in real-time. Use, refine, or try variations.
 
-**[↓ Scroll down for detailed screenshots ↓](#-web-ui-design-modernist-hardware-inspired)**
+---
 
 </div>
 
