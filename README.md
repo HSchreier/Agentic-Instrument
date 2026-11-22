@@ -154,107 +154,91 @@ The app features a professional web UI designed by Claude Design, with a hardwar
 
 #### ✨ Generate Tab: Pattern Editor with 16-Step Sequencer
 
-The Generate tab provides a comprehensive workspace for pattern creation:
-- **Left Panel:** Style selection (Techno, House, Tech House, Minimal, D&B), tempo knob with LCD display, template selection, bass synth toggle
-- **Center:** 16-step sequencer grid with draggable controls, 6 voices (Kick, Snare, Percussion, Open Hat, Closed Hat, Bass)
-- **Right Panel:** Device rail with MIDI output selector, loaded pattern display, send button with estimated time
-- **Bottom:** Undo/Clear/Re-roll buttons with pattern name display
+**What you see:**
+- **Left sidebar** with 4 control sections:
+  - **Q1 - STYLE:** Radio buttons for Techno, House, Tech House, Minimal, D&B
+  - **Q2 - TEMPO:** Big "130" display with tempo range (e.g., "Techno sits at 125-140 BPM")
+  - **Q3 - TEMPLATE:** Radio buttons for Four on the Floor, Half Time, Minimal
+  - **Q4 - BASS SYNTH:** Toggle switch (OFF/ON)
 
-```
-┌──────────────────────────────────────────────────────────┐
-│  GENERATE                                           🔴   │
-├──────────────────────────────────────────────────────────┤
-│  Style │ Techno      Tempo │ 130    │ Device Rail     │
-│        │ House              │ BPM    │ ─────────────   │
-│        │ Tech House    ▼    │        │ MIDI Output     │
-│        │ Minimal                     │ [Select device] │
-│  Template │ Four on the Floor       │ 🔄 Refresh      │
-│          │ Half Time                │ ─────────────   │
-│          │ Minimal            ▼     │ Loaded Pattern  │
-│  Bass ▼ OFF                         │ Untitled        │
-│        ▼                             │ 0 events        │
-├────────────────────────────────────────────────────────┤
-│  STEP  │ 0  1  2  3  4  5  6  7...  │ Est. 1 seconds │
-│  KICK  │ ■  □  ■  □  ■  □  ■  □    │ [Send 0 Events]│
-│  SNARE │ □  ■  □  ■  □  ■  □  ■    │                │
-│  PERC  │ □  □  ■  □  □  □  ■  □    │                │
-│  OPEN  │ □  □  □  ■  □  □  □  ■    │                │
-│  CLOSE │ ■  □  ■  □  ■  □  ■  □    │                │
-│  BASS  │ □  □  □  □  □  □  □  □    │                │
-├────────────────────────────────────────────────────────┤
-│ [Undo] [Clear] [Re-roll] Untitled Pattern         │
-└────────────────────────────────────────────────────────┘
-```
+- **Center canvas** (60% of screen):
+  - Black LCD-style header: "RHYTHM WOLF - ANALOG DRUM MACHINE & BASS SYNTH - MIDI"
+  - Red tempo display: "130"
+  - 6×16 sequencer grid with alternating row colors (dark gray/charcoal)
+  - Row labels: BD, SD, PC, OH, CH, BS (for Kick, Snare, Perc, Open Hat, Closed Hat, Bass)
+  - Column numbers 0-15 for 16 steps
+  - Each cell is clickable to cycle through velocities
+  - Helper text at bottom: "Click a step to cycle accent + soft + off. Drag knobs vertically"
+  - Control buttons: [Undo] [Clear] [Re-roll variation] [Untitled] (pattern name display)
+
+- **Right sidebar - Device Rail** (persistent on desktop, 320px wide):
+  - **MIDI OUTPUT** section: Status tag (blue "Connected" or gray "No device")
+  - Device selector dropdown: "Select device..."
+  - Refresh button (circular with rotate icon)
+  - Help text: "Couldn't find Rhythm Wolf. Make sure it's connected via USB..."
+  - **LOADED PATTERN** section: Shows "Untitled" with event count "0 events"
+  - Mini 6×16 preview grid (black background, red dots for events)
+  - Estimated time: "Est. 1 seconds"
+  - **[Send 0 Events →]** button (red, full-width, disabled state shown in pink)
 
 #### 📚 Library Tab: Preset Browser with Search & Filter
 
-The Library tab showcases all 15 industry-standard presets:
-- **Search:** Find patterns by name or description
-- **Filter:** By music style (All, DNB, House, Minimal, Tech House, Techno)
-- **Sort:** By name, tempo, or style
-- **Cards:** Each preset shows mini-grid preview, event count, density meter, and Load/Send buttons
-- **Favorites:** Star icon to save frequently-used patterns
+**What you see:**
+- **Header:** "📚 Pattern Library" with count "16 of 15 patterns"
 
-```
-┌──────────────────────────────────────────────────────────┐
-│  LIBRARY                                          🔴   │
-├──────────────────────────────────────────────────────────┤
-│ [Search patterns...]                                     │
-│ [All] [DNB] [House] [Minimal] [Tech House] [Techno]    │
-│ Sort: [Name ▼]                                          │
-│                                                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
-│  │ Acid House  │  │ Ambient     │  │ Berlin      │    │
-│  │ 125 BPM     │  │ Techno      │  │ Techno      │    │
-│  │ ■ ■ ■ ■    │  │ ■   ■       │  │ ■ ■ ■ ■    │    │
-│  │ [Load][Send]│  │ [Load][Send]│  │ [Load][Send]│    │
-│  └─────────────┘  └─────────────┘  └─────────────┘    │
-│                                                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
-│  │ Deep House  │  │ Electro     │  │ Minimal...  │    │
-│  │ 120 BPM     │  │ 128 BPM     │  │             │    │
-│  │ ■   ■       │  │ ■ ■ ■       │  │ ■           │    │
-│  │ [Load][Send]│  │ [Load][Send]│  │ [Load][Send]│    │
-│  └─────────────┘  └─────────────┘  └─────────────┘    │
-└──────────────────────────────────────────────────────────┘
-```
+- **Search & Filter Bar:**
+  - Full-width search input: "Search patterns by name or description..."
+  - Style filter buttons: [All] [dnb] [house] [minimal] [tech_house] [techno] (black/gray toggle style)
+  - Sort dropdown: Default "Name" with options for Tempo, Style
+
+- **Preset Grid:** 3-column responsive layout
+  - Each card shows:
+    - **Top:** Music style + BPM (gray text, small font): "Acid House · 125 BPM"
+    - **Title:** "Acid House" (bold, large font)
+    - **Star icon:** ☆ (hollow star for unfavorited, ⭐ filled when saved)
+    - **Mini grid preview:** 6×16 red dots on black background
+    - **Description:** "Classic acid house. Heavy kick, bouncy snare, funky hi-hat syncopation (1920-320 era)"
+    - **Density meter:** ▌▌ "Medium · 16 events" (3-bar indicator)
+    - **Action buttons:** [📂 Load] [🚀 Send] (secondary + primary styling)
+
+- **Example Cards Visible:**
+  1. "Acid House - 125 BPM" with mini grid showing kick pattern
+  2. "Ambient Techno - 110 BPM" with sparser pattern
+  3. "Berlin Techno - 132 BPM" with dense pattern
+  
+- **Device Rail:** Same as Generate tab (persistent right sidebar)
 
 #### 💬 Chat Tab: Natural Language Pattern Generation
 
-The Chat tab enables creative pattern generation through conversation:
-- **Message List:** View Claude's responses with generated pattern previews
-- **Quick Prompts:** Pre-written suggestions for inspiration (e.g., "Upbeat melodic pattern for progressive house")
-- **Input Bar:** Describe your pattern idea; press Enter or click send
-- **Pattern Blocks:** Each response includes a mini-grid preview and "Use Pattern" button to load into editor
-- **Responsive:** Works on desktop and tablet with smooth scrolling
+**What you see:**
+- **Header:** "💬 Pattern Generator" with subtitle "Describe your pattern idea and I'll generate it for you"
 
-```
-┌──────────────────────────────────────────────────────────┐
-│  CHAT                                              🔴   │
-├──────────────────────────────────────────────────────────┤
-│  💬 Pattern Generator                                   │
-│  Describe your pattern idea and I'll generate it        │
-│                                                          │
-│  Claude: "Hey! I can help you generate MIDI patterns   │
-│  using natural language..."                             │
-│                                                          │
-│  Try something:                                         │
-│  [🎹 Upbeat melodic pattern...]                        │
-│  [🥁 Minimal techno kick drum...]                      │
-│                                                          │
-│  You: "deep house groove"                              │
-│                                                          │
-│  Claude: "I've created a Deep House pattern at         │
-│  120 BPM with 16 events..."                            │
-│  ┌─────────────────────────────────────┐              │
-│  │ Deep House - 120 BPM                │              │
-│  │ ■   ■       ■       ■               │              │
-│  │ [📂 Use Pattern]                    │              │
-│  └─────────────────────────────────────┘              │
-│                                                          │
-│  [Describe a pattern idea...] [➤]                      │
-└──────────────────────────────────────────────────────────┘
-```
+- **Message History (scrollable area):**
+  - **Claude's initial message** (light gray background box, left-aligned):
+    - "Hey! I can help you generate MIDI patterns using natural language. Describe the vibe you want, the tempo, style, or any specific musical elements, and I'll create a pattern for you."
+
+- **Quick Prompts Section** (shown when no messages):
+  - "Try something:" label (small gray text)
+  - Two prompt suggestion buttons in responsive layout:
+    - "🎹 Upbeat melodic pattern for progressive house"
+    - "🥁 Minimal techno kick drum only"
+  - (Additional prompts available: house groove, acid bassline, ambient texture)
+
+- **Message Input Section:**
+  - Full-width text input: "Describe a pattern idea..." (placeholder text)
+  - Red circular send button with arrow icon (➤) on right
+
+- **Device Rail:** Same as Generate/Library tabs
+
+**Example Interaction Flow:**
+  1. User types: "deep house groove"
+  2. Message appears as red pill/tag at top of input
+  3. Claude responds in gray box with pattern details
+  4. Pattern preview block shows:
+     - Header: "Deep House - 120 BPM"
+     - 6×16 mini-grid with red dots
+     - [📂 Use Pattern] button to load into Generate tab
+  5. Continue conversation or use the generated pattern
 
 **Reference:** [See the full design mockups](design_handoff_rhythm_wolf_midi/Rhythm%20Wolf%20MIDI.dc.html) (open in browser from the design handoff folder)
 
