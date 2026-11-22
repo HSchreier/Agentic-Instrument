@@ -26,10 +26,11 @@
 ## v1.1 (Near-term - Q1 2025)
 
 ### Experimental Features
-- 🧪 **Prime Factorization Compression** — Encode patterns as semantic integers
-  - Gödel-style numbering for ultra-compact storage
-  - Natural similarity via shared prime factors
-  - Use for pattern ID generation & clustering
+- 🧪 **Prime Factorization + FFT/Gaussian Vectorization** — Hybrid semantic + signal processing
+  - Prime factorization for semantic grounding (shared factors = musical relationship)
+  - FFT for O(n log n) frequency-domain analysis (captures timing naturally)
+  - Gaussian vectorization for fixed-size embeddings (avoid large numbers)
+  - Use for pattern discovery, similarity matching, ML pre-training
 
 ### Improvements
 - 🎯 Real-time backend connection (replace simulation)

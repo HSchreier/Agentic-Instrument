@@ -138,36 +138,48 @@ Claude gains better understanding for:
 4. **Compression** — Store tokens instead of full patterns
 5. **Pattern morphing** — Interpolate between pattern embeddings
 
-## 🧪 Experimental: Prime Factorization Compression (Roadmap)
+## 🧪 Experimental: Prime Factorization + Signal Processing (Roadmap)
 
 **Status:** Planned for v2.0+
 
-Encode entire 16-step patterns as single integers using prime factorization (Gödel-style numbering):
+Hybrid approach: Prime factorization semantics + FFT/Gaussian vectorization for efficiency.
 
 ```typescript
-// Assign primes to each token type
+// 1. Token sequence → Prime factorization (semantic grounding)
+[KICK_ON, STEP_NEXT, SNARE_ON, ...] → [2, 17, 3, 19, ...]
 TOKEN_PRIMES = { KICK_ON: 2, SNARE_ON: 3, PERC_ON: 5, ... }
 
-// Pattern → Single compressed integer
-pattern → 2^4 × 3^2 × 5^1 × ... (represents drum hits per voice)
+// 2a. FFT approach (capture frequency/timing patterns)
+primes[] → FFT → [freq_0, freq_1, freq_2, ...] (O(n log n))
+// Naturally encodes rhythm & timing in frequency domain
 
-// Benefits
-- Ultra-compact storage (16-step pattern = single integer)
-- Natural similarity via shared prime factors
-- Semantic embedding space for ML
-- Pattern morphing via interpolation
+// 2b. Gaussian vectorization (fixed-size embeddings)
+primes[] → Gaussian mixture model → [v₁, v₂, ..., v₇]
+// Compact representation, semantic + statistical properties
+
+// Result: Semantic + efficient + temporal-aware
 ```
 
-**Use Cases:**
-- Pattern library IDs (store as integers in databases)
-- Similarity matching (patterns sharing primes = musically related)
-- ML pre-training (inherent numeric representation)
-- Pattern discovery via GCD/LCM relationships
+**Advantages:**
+- ✅ Prime semantics (shared factors = musical relationship)
+- ✅ FFT is O(n log n) — computationally efficient
+- ✅ Frequency domain preserves timing naturally
+- ✅ Fixed-size vectors (7-dim) — no large number bloat
+- ✅ ML-ready — works with neural nets directly
+- ✅ Hybrid grounding — number theory + signal processing
 
-**Challenges:**
-- Large numbers require BigInt handling
-- Factorization is CPU-expensive for large patterns
-- Needs positional encoding for explicit timing
+**Use Cases:**
+- Pattern library IDs with semantic meaning
+- Similarity via prime factors + frequency cosine distance
+- ML pre-training with dual representation (symbolic + statistical)
+- Pattern discovery via GCD/LCM + spectral analysis
+- Cross-genre pattern interpolation in frequency space
+
+**Implementation Priority:**
+1. FFT-based frequency analysis (simpler, proven)
+2. Add Gaussian vectorization layer
+3. Benchmark vs. current embeddings
+4. Integrate into similarity matching
 
 ## Testing
 
