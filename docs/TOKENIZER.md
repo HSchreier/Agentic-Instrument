@@ -138,6 +138,37 @@ Claude gains better understanding for:
 4. **Compression** — Store tokens instead of full patterns
 5. **Pattern morphing** — Interpolate between pattern embeddings
 
+## 🧪 Experimental: Prime Factorization Compression (Roadmap)
+
+**Status:** Planned for v2.0+
+
+Encode entire 16-step patterns as single integers using prime factorization (Gödel-style numbering):
+
+```typescript
+// Assign primes to each token type
+TOKEN_PRIMES = { KICK_ON: 2, SNARE_ON: 3, PERC_ON: 5, ... }
+
+// Pattern → Single compressed integer
+pattern → 2^4 × 3^2 × 5^1 × ... (represents drum hits per voice)
+
+// Benefits
+- Ultra-compact storage (16-step pattern = single integer)
+- Natural similarity via shared prime factors
+- Semantic embedding space for ML
+- Pattern morphing via interpolation
+```
+
+**Use Cases:**
+- Pattern library IDs (store as integers in databases)
+- Similarity matching (patterns sharing primes = musically related)
+- ML pre-training (inherent numeric representation)
+- Pattern discovery via GCD/LCM relationships
+
+**Challenges:**
+- Large numbers require BigInt handling
+- Factorization is CPU-expensive for large patterns
+- Needs positional encoding for explicit timing
+
 ## Testing
 
 Run tests:
