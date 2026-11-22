@@ -18,24 +18,6 @@
 🚀 **New:** Professional web UI with hardware-inspired faceplate design, 16-step sequencer, and Claude integration!  
 ✨ **Status:** ✅ **All phases complete!** Phases 1-9: Foundation, Web UI, Device Rail & Send, Library, Chat, Polish animations.
 
----
-
-## 📸 Live Screenshots
-
-### Generate Tab – Pattern Editor with 16-Step Sequencer
-![Generate Tab - Create and edit MIDI patterns with hardware-inspired controls](docs/screenshots/01-generate.png)
-Create patterns with style/tempo/template controls, drag pads on the 6×16 sequencer grid, and send to device in real-time.
-
-### Library Tab – Browse & Filter 15 Presets
-![Library Tab - Browse, search, and load preset patterns](docs/screenshots/02-library.png)
-Search patterns by name, filter by style (Techno, House, Minimal, etc.), sort by tempo, and load/send with one click.
-
-### Chat Tab – Natural Language Pattern Generation
-![Chat Tab - Describe patterns in plain English, powered by Claude AI](docs/screenshots/03-chat.png)
-Type what you want ("deep house groove"), Claude generates MIDI patterns in real-time. Use, refine, or try variations.
-
----
-
 </div>
 
 ---
