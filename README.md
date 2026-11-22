@@ -18,6 +18,51 @@
 🚀 **New:** Professional web UI with hardware-inspired faceplate design, 16-step sequencer, and Claude integration!  
 ✨ **Status:** ✅ **All phases complete!** Phases 1-9: Foundation, Web UI, Device Rail & Send, Library, Chat, Polish animations.
 
+## 📸 App in Action
+
+**Three powerful tabs for complete MIDI workflow:**
+
+```
+┌─── GENERATE TAB ──────────────────────────────────────────┐
+│ Left: Style (Techno, House...) | Tempo | Template | Bass │
+│ Center: 6×16 Sequencer Grid with draggable pads           │
+│ Right: Device Rail (selector, status, send button)        │
+│ Bottom: Controls (Undo, Clear, Re-roll)                   │
+└───────────────────────────────────────────────────────────┘
+
+┌─── LIBRARY TAB ───────────────────────────────────────────┐
+│ [Search...] [Filter: All|DNB|House|...] [Sort: Name ▼]   │
+│                                                            │
+│ ┌─────────────────┐ ┌──────────────┐ ┌──────────────┐    │
+│ │ Acid House      │ │ Ambient Tech │ │ Berlin Tech  │    │
+│ │ 125 BPM    ☆    │ │ 110 BPM  ☆   │ │ 132 BPM  ☆   │    │
+│ │ ████░░░░░░░░░░  │ │ ██░░░░░░░░░░ │ │ ███████░░░░░ │    │
+│ │ [Load][Send]    │ │ [Load][Send] │ │ [Load][Send] │    │
+│ └─────────────────┘ └──────────────┘ └──────────────┘    │
+└───────────────────────────────────────────────────────────┘
+
+┌─── CHAT TAB ──────────────────────────────────────────────┐
+│ 💬 "Describe your pattern idea and I'll generate it"      │
+│                                                            │
+│ Claude: "Hey! I can help you generate MIDI patterns..."   │
+│                                                            │
+│ [🎹 Upbeat melodic...] [🥁 Minimal techno...]            │
+│                                                            │
+│ You: "deep house groove"                                  │
+│                                                            │
+│ Claude: "I've created a Deep House pattern at 120 BPM..  │
+│ ┌──────────────────────────────────┐                     │
+│ │ Deep House - 120 BPM             │                     │
+│ │ ████░░░░░░░░░░░░░░░░░░░░░░░░░░░ │                     │
+│ │ [📂 Use Pattern]                 │                     │
+│ └──────────────────────────────────┘                     │
+│                                                            │
+│ [Describe a pattern...] [➤]                              │
+└───────────────────────────────────────────────────────────┘
+```
+
+**[↓ Scroll down for detailed screenshots ↓](#-web-ui-design-modernist-hardware-inspired)**
+
 </div>
 
 ---
