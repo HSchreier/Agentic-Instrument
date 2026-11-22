@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Send } from 'lucide-react'
 import { useStore } from '@/state/store'
 import { generate, eventCount } from '@/lib/pattern'
+import { patternToTokens, patternToDescription, patternToASCII } from '@/lib/tokenizer'
 import { Button } from '@/components/ui/Button'
 import { MiniGrid } from '@/components/hw/MiniGrid'
 
@@ -73,11 +74,21 @@ export function ChatView() {
       const seed = Math.floor(Math.random() * 10000)
       const pattern = generate(style, 'Four on the Floor', false, seed)
       const events = eventCount(pattern)
+      const tokens = patternToTokens(pattern)
+      const description = patternToDescription(pattern)
+      const ascii = patternToASCII(pattern)
 
       const claudeMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: 'claude',
-        text: `I've created a ${styleStr} pattern at ${bpm} BPM with ${events} events. The pattern uses a dynamic seed for variation. Click "Use Pattern" below to load it into the editor, or tweak the parameters there.`,
+        text: `I've created a ${styleStr} pattern at ${bpm} BPM. **Pattern tokens:** ${tokens.slice(0, 10).join(' ')}... (${tokens.length} total)
+
+**Composition:** ${description}
+
+\`\`\`
+${ascii}\`\`\`
+
+This pattern has ${events} events distributed across ${tokens.filter(t => t.endsWith('_ON')).length} hits. Click "Use Pattern" to load it!`,
         pattern: {
           name: `${styleStr} Pattern (${bpm} BPM)`,
           style: styleStr,
