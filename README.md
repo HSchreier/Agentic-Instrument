@@ -22,6 +22,22 @@
 
 ---
 
+## 📸 App Screenshots
+
+### Generate Tab – Pattern Editor
+![Generate Tab - Create MIDI patterns with hardware-inspired controls](docs/screenshots/showcase-generate.jpg)
+
+### Library Tab – Preset Browser
+![Library Tab - Browse and load preset patterns](docs/screenshots/showcase-library.jpg)
+
+### Chat Tab – Natural Language Generation
+![Chat Tab - Describe patterns in English](docs/screenshots/showcase-chat.jpg)
+
+### Responsive Design
+![Tablet View - Responsive layout on smaller screens](docs/screenshots/showcase-tablet.jpg)
+
+---
+
 ## ✨ Features
 
 🎵 **Generate patterns** in multiple styles (Techno, House, Tech House, Minimal, D&B)  
