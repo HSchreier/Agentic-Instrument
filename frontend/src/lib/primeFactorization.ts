@@ -62,19 +62,19 @@ export function vectorToMidi(vec: number[], bitDepth: number = 8): number[] {
 
 // Full encode: Pattern → Primes → FFT → Gaussian → MIDI
 export function encodePatternToPrimes(pattern: Pattern): bigint[] {
-  const composites: bigint[] = []
+  const result: bigint[] = []
 
   for (let v = 0; v < 6; v++) {
     const primes = voiceToPrimes(pattern, v)
     const composite = primesToComposite(primes)
-    composites.push(composite)
+    result.push(composite)
   }
 
-  return composites
+  return result
 }
 
 // Decode: Composites → Pattern
-export function decodePattern(composites: bigint[]): Pattern {
+export function decodePattern(_composites: bigint[]): Pattern {
   const pattern: Pattern = Array(6).fill(null).map(() => Array(16).fill(0))
 
   // TODO: Implement proper factorization + reconstruction
