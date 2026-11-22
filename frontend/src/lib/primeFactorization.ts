@@ -82,13 +82,14 @@ export function decodePattern(_composites: bigint[]): Pattern {
   return pattern
 }
 
-// Semantic similarity via shared primes
+// Semantic similarity via shared primes (Jaccard index)
 export function primeSimilarity(p1: bigint, p2: bigint): number {
   const gcd = (a: bigint, b: bigint): bigint => (b === BigInt(0) ? a : gcd(b, a % b))
   const common = gcd(p1, p2)
   const lcm = (p1 * p2) / common
 
-  return Number(common * BigInt(2)) / Number(lcm)
+  // Jaccard: intersection / union = common / lcm
+  return Number(common) / Number(lcm)
 }
 
 // Status: PoC Foundation Complete

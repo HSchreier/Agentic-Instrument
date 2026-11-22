@@ -46,6 +46,8 @@
 📚 **Pattern library** with 15 industry-standard presets + save/search/favorite  
 🌐 **Professional web UI** built with React 18, TypeScript, Tailwind CSS, Vite  
 🎚️ **Hardware faceplate** design with 16-step sequencer grid and draggable knobs  
+🧠 **Beat tokenization** — Semantic token-based pattern representation for AI understanding
+📡 **Prime factorization (PoC)** — Experimental compression via Gödel numbering + FFT  
 📦 **Fully containerized** with Docker—no version conflicts, works everywhere  
 ⚡ **CLI-first** design for scripting and automation  
 💾 **Save & load** patterns as JSON for reuse  
@@ -304,6 +306,19 @@ The app features a professional web UI designed by Claude Design, with a hardwar
 ✅ Design system documentation  
 ✅ Architecture and workflow diagrams  
 ✅ MIDI specifications and CLI reference
+
+**Bonus Features:**
+✅ **Beat Tokenization** — Token-based pattern representation for Claude AI understanding  
+   - 13 token types (6 voices × on/off + step/end markers)
+   - Pattern embeddings for similarity matching (0-1 scale)
+   - ASCII visualization for pattern analysis
+   - Bidirectional conversion (pattern ↔ tokens)
+
+🧪 **Prime Factorization PoC** (Experimental v1.1 feature)  
+   - Gödel-style numbering for semantic compression
+   - FFT + Gaussian vectorization for efficiency
+   - Formula: `V[v,s] = ⌊Gaussian(FFT(τ(P[v]))) / 2^b⌋ × 127`
+   - See [PRIME_FACTORIZATION_POC.md](docs/PRIME_FACTORIZATION_POC.md)
 
 ### Design System: "Modernist Hardware-Inspired"
 

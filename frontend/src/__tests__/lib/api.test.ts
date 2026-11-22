@@ -1,8 +1,22 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import axios from 'axios'
 import { generatePattern, sendPattern, listDevices } from '@/lib/api'
 
-vi.mock('axios')
+// Mock axios at the module level
+vi.mock('axios', () => {
+  const mockAxios = {
+    create: vi.fn(() => ({
+      get: vi.fn(),
+      post: vi.fn(),
+    })),
+    get: vi.fn(),
+    post: vi.fn(),
+  }
+  return { default: mockAxios }
+})
+
+// Get the mocked axios instance
+import axios from 'axios'
+const mockApi = (axios.create as any)()
 
 describe('API Client', () => {
   beforeEach(() => {
@@ -17,7 +31,7 @@ describe('API Client', () => {
           events: [],
         },
       }
-      vi.mocked(axios.post).mockResolvedValue(mockResponse)
+      vi.mocked(mockApi.post).mockResolvedValue(mockResponse)
 
       const result = await generatePattern({
         style: 'techno',
@@ -30,7 +44,7 @@ describe('API Client', () => {
 
     it('should handle errors gracefully', async () => {
       const error = new Error('API Error')
-      vi.mocked(axios.post).mockRejectedValue(error)
+      vi.mocked(mockApi.post).mockRejectedValue(error)
 
       await expect(
         generatePattern({ style: 'techno' })
@@ -41,7 +55,7 @@ describe('API Client', () => {
   describe('listDevices', () => {
     it('should return list of devices', async () => {
       const mockDevices = ['Akai Rhythm Wolf', 'IAC Driver Bus 1']
-      vi.mocked(axios.get).mockResolvedValue({
+      vi.mocked(mockApi.get).mockResolvedValue({
         data: { devices: mockDevices },
       })
 
@@ -59,7 +73,7 @@ describe('API Client', () => {
           events_sent: 24,
         },
       }
-      vi.mocked(axios.post).mockResolvedValue(mockResponse)
+      vi.mocked(mockApi.post).mockResolvedValue(mockResponse)
 
       const result = await sendPattern({
         device: 'Akai Rhythm Wolf',
