@@ -13,7 +13,7 @@ export interface MIDIDevice {
 export class MIDIManager {
   private access: MIDIAccess | null = null
   private devices: Map<string, MIDIDevice> = new Map()
-  private listeners: ((devices: MIDIDevice[]) => void)[] = []
+  private listeners: ((detectedDevices: MIDIDevice[]) => void)[] = []
 
   async init(): Promise<boolean> {
     try {
@@ -76,8 +76,8 @@ export class MIDIManager {
   }
 
   private notifyListeners() {
-    const deviceList = Array.from(this.devices.values())
-    this.listeners.forEach((listener) => listener(deviceList))
+    const detectedList = Array.from(this.devices.values())
+    this.listeners.forEach((listener) => listener(detectedList))
   }
 
   getDevices(): MIDIDevice[] {

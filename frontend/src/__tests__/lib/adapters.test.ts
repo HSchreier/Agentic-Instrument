@@ -66,18 +66,18 @@ describe('Agentic Instruments v2: Adapters', () => {
     it('should identify mapped parts', () => {
       expect(isMapped(wolf, 'kick')).toBe(true)
       expect(isMapped(wolf, 'snare')).toBe(true)
-      expect(isMapped(wolf, 'tom')).toBe(false) // Not on Wolf
+      expect(isMapped(wolf, 'tom')).toBe(true) // PERC maps to perc+tom
     })
 
     it('should count mapped parts', () => {
-      expect(mappedCount(wolf)).toBe(7) // All except tom
+      expect(mappedCount(wolf)).toBe(8) // All 8 parts mapped
       expect(mappedCount(volca)).toBe(1) // Only bass → bass line
     })
 
     it('should find primary voice', () => {
       expect(primaryVoice(wolf, 'kick')).toBe(0) // First voice
       expect(primaryVoice(wolf, 'snare')).toBe(1)
-      expect(primaryVoice(wolf, 'tom')).toBe(-1) // Not found
+      expect(primaryVoice(wolf, 'tom')).toBe(2) // PERC voice index 2
     })
   })
 

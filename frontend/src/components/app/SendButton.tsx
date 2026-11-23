@@ -108,7 +108,7 @@ export function SendButton() {
       >
         <div className="space-y-3 text-sm">
           <p>
-            Sending <strong>{events} events</strong> of <strong>"{patternName}"</strong> at{' '}
+            Sending <strong>{events} events</strong> of <strong>&quot;{patternName}&quot;</strong> at{' '}
             <strong>{bpm} BPM</strong>.
           </p>
           <p>Estimated <strong>{estimatedSecs} seconds</strong>.</p>
