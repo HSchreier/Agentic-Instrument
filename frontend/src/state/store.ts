@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import type { Style, Template, Pattern, VoiceId } from '@/lib/pattern'
 import { STYLES } from '@/lib/pattern'
+import type { UniversalPattern, Adapter } from '@/lib/adapters'
+import { ADAPTERS } from '@/lib/adapters'
 
 export interface Toast {
   id: string
@@ -14,7 +16,7 @@ export interface Message {
   role: 'user' | 'assistant'
   text: string
   time: Date
-  pattern?: Pattern
+  pattern?: UniversalPattern
 }
 
 export interface Port {
@@ -26,8 +28,8 @@ export type DeviceState = 'connected' | 'disconnected' | 'error' | 'scanning'
 
 interface AppStore {
   // UI & Navigation
-  tab: 'Generate' | 'Library' | 'Chat'
-  setTab: (tab: 'Generate' | 'Library' | 'Chat') => void
+  tab: 'Generate' | 'Library' | 'Chat' | 'Devices'
+  setTab: (tab: 'Generate' | 'Library' | 'Chat' | 'Devices') => void
 
   // Pattern Generation
   style: Style
@@ -43,15 +45,29 @@ interface AppStore {
   patternName: string
   setPatternName: (name: string) => void
 
-  // Pattern Data
-  pattern: Pattern
-  setPattern: (pattern: Pattern) => void
-  undo: Pattern[]
+  // Multi-Device (v2.0)
+  deviceId: string
+  setDeviceId: (id: string) => void
+  view: 'universal' | 'device'
+  setView: (view: 'universal' | 'device') => void
+  page: number
+  setPage: (page: number) => void
+  knobs: Record<string, number> // key: `${deviceId}:${strip}:${knob}`
+  setKnob: (deviceId: string, strip: number, knob: number, value: number) => void
+  deviceMuted: Record<string, boolean> // key: `${deviceId}:${voiceIndex}`
+  toggleDeviceMute: (deviceId: string, voiceIndex: number) => void
+  detected: Record<string, boolean> // deviceId → isDetected
+  setDetected: (deviceId: string, detected: boolean) => void
+
+  // Pattern Data (now UniversalPattern)
+  pattern: UniversalPattern
+  setPattern: (pattern: UniversalPattern) => void
+  undo: UniversalPattern[]
   pushUndo: () => void
   undoLast: () => void
   clearPattern: () => void
 
-  // Voice Controls
+  // Voice Controls (legacy, kept for compatibility)
   levels: Record<VoiceId, number>
   setLevel: (voice: VoiceId, level: number) => void
   decay: Record<VoiceId, number>
@@ -125,12 +141,59 @@ const defaultMuted: Record<VoiceId, boolean> = {
   bass: false,
 }
 
-const defaultPattern: Pattern = Array(6).fill(null).map(() => Array(16).fill(0))
+// v2.0: Universal pattern format (8 parts × 16 steps)
+const defaultPattern: UniversalPattern = Array(8)
+  .fill(null)
+  .map(() => Array(16).fill(0))
+
+// Initialize detected devices (all offline by default)
+const defaultDetected: Record<string, boolean> = Object.fromEntries(ADAPTERS.map((a) => [a.id, false]))
 
 export const useStore = create<AppStore>((set, get) => ({
     // UI & Navigation
     tab: 'Generate',
     setTab: (tab) => set({ tab }),
+
+    // Multi-Device (v2.0)
+    deviceId: 'wolf', // Default to Rhythm Wolf
+    setDeviceId: (deviceId) => {
+      const newAdapter = ADAPTERS.find((a) => a.id === deviceId)
+      if (newAdapter) {
+        set({
+          deviceId,
+          page: 0, // Reset to first page
+          view: newAdapter.pitched ? 'device' : 'universal', // Force device view for pitched
+        })
+      }
+    },
+    view: 'universal',
+    setView: (view) => set({ view }),
+    page: 0,
+    setPage: (page) => set({ page }),
+    knobs: {},
+    setKnob: (deviceId, strip, knob, value) =>
+      set((state) => ({
+        knobs: {
+          ...state.knobs,
+          [`${deviceId}:${strip}:${knob}`]: Math.max(0, Math.min(100, value)),
+        },
+      })),
+    deviceMuted: {},
+    toggleDeviceMute: (deviceId, voiceIndex) =>
+      set((state) => {
+        const key = `${deviceId}:${voiceIndex}`
+        return {
+          deviceMuted: {
+            ...state.deviceMuted,
+            [key]: !state.deviceMuted[key],
+          },
+        }
+      }),
+    detected: defaultDetected,
+    setDetected: (deviceId, detected) =>
+      set((state) => ({
+        detected: { ...state.detected, [deviceId]: detected },
+      })),
 
     // Pattern Generation
     style: 'Techno',
@@ -146,7 +209,7 @@ export const useStore = create<AppStore>((set, get) => ({
     patternName: 'Untitled',
     setPatternName: (name) => set({ patternName: name }),
 
-    // Pattern Data
+    // Pattern Data (now UniversalPattern)
     pattern: defaultPattern,
     setPattern: (pattern) => {
       const current = get().pattern
