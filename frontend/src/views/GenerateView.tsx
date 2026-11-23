@@ -173,10 +173,10 @@ export function GenerateView() {
         <div className="bg-ink text-bg p-6 shadow-md rounded-none flex justify-between items-start">
           <div>
             <div className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
-              Rhythm Wolf
+              Agentic Instrument
             </div>
             <div className="text-xs text-neutral-400 uppercase tracking-widest">
-              Analog Drum Machine & Bass Synth · MIDI
+              Universal Drum Machine Controller · MIDI
             </div>
           </div>
           <div className="flex items-center gap-6">

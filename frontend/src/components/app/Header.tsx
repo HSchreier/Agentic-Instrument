@@ -36,8 +36,8 @@ export function Header() {
             <div className="w-1.5 h-1.5 bg-accent" />
           </div>
           <div>
-            <div className="text-sm font-black leading-tight">RHYTHM WOLF</div>
-            <div className="text-xs font-semibold tracking-wider uppercase">MIDI CONTROL</div>
+            <div className="text-sm font-black leading-tight">AGENTIC</div>
+            <div className="text-xs font-semibold tracking-wider uppercase">INSTRUMENT</div>
           </div>
         </div>
 
