@@ -1,5 +1,7 @@
 import { useStore } from '@/state/store'
-import { eventCount, estimateSendMs } from '@/lib/pattern'
+import { eventCount, estimateSendMs, toDevice } from '@/lib/adapters'
+import { ADAPTERS } from '@/lib/adapters'
+import { midiManager } from '@/lib/midi'
 import { Button } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 
@@ -8,8 +10,9 @@ export function SendButton() {
     pattern,
     patternName,
     bpm,
-    selectedPort,
+    deviceId,
     deviceState,
+    detected,
     sendConfirmOpen,
     setSendConfirmOpen,
     sending,
@@ -18,38 +21,60 @@ export function SendButton() {
     setSendProgress,
   } = useStore()
 
+  const adapter = ADAPTERS.find((a) => a.id === deviceId)
+  const isDeviceDetected = detected[deviceId]
+
   const events = eventCount(pattern)
   const estimatedMs = estimateSendMs(events)
   const estimatedSecs = Math.round(estimatedMs / 1000)
 
   const isDisabled =
-    !selectedPort || deviceState !== 'connected' || events === 0 || sending
+    !adapter || !isDeviceDetected || deviceState !== 'connected' || events === 0 || sending
 
   const handleSend = async () => {
-    if (isDisabled) return
+    if (isDisabled || !adapter) return
 
     setSending(true)
     setSendProgress(0)
 
-    // Simulate send progress
-    let currentProgress = 0
-    const interval = setInterval(() => {
-      currentProgress = Math.min(currentProgress + Math.random() * 20, 90)
-      setSendProgress(currentProgress)
-    }, 100)
+    try {
+      // Convert universal pattern to device-specific format
+      const devicePattern = toDevice(pattern, adapter)
 
-    // Simulate send completion
-    setTimeout(() => {
-      clearInterval(interval)
-      setSendProgress(100)
+      // Send via Web MIDI
+      const success = await midiManager.sendPattern(deviceId, devicePattern)
+
+      if (success) {
+        // Simulate progress to completion
+        let currentProgress = 0
+        const interval = setInterval(() => {
+          currentProgress = Math.min(currentProgress + Math.random() * 25, 95)
+          setSendProgress(currentProgress)
+        }, 50)
+
+        setTimeout(() => {
+          clearInterval(interval)
+          setSendProgress(100)
+          setSending(false)
+          setSendConfirmOpen(false)
+          addToast(
+            'success',
+            `Sent to ${adapter.name}`,
+            `${events} events in ${estimatedSecs}s · ${patternName}`
+          )
+        }, 500)
+      } else {
+        setSending(false)
+        addToast(
+          'error',
+          'Send failed',
+          `Could not reach ${adapter.name}. Check connection.`
+        )
+      }
+    } catch (err) {
       setSending(false)
-      setSendConfirmOpen(false)
-      addToast(
-        'success',
-        'Sent to Rhythm Wolf',
-        `${events} events in ${estimatedSecs}s · ${patternName}`
-      )
-    }, estimatedMs)
+      addToast('error', 'Send error', String(err))
+    }
   }
 
   return (
@@ -66,7 +91,7 @@ export function SendButton() {
 
       <Dialog
         open={sendConfirmOpen}
-        title="Send to Rhythm Wolf?"
+        title={`Send to ${adapter?.name}?`}
         onClose={() => setSendConfirmOpen(false)}
         actions={[
           {

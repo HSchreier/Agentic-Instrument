@@ -1,4 +1,5 @@
 import { useStore } from '@/state/store'
+import { useMIDIDevices } from '@/hooks/useMIDIDevices'
 import { Header } from '@/components/app/Header'
 import { ToastHost } from '@/components/ui/Toast'
 import { DevicePanel } from '@/components/app/DevicePanel'
@@ -11,6 +12,7 @@ import { ChatView } from '@/views/ChatView'
 
 export default function App() {
   const { tab, toasts, removeToast } = useStore()
+  useMIDIDevices()
 
   return (
     <div className="min-h-screen bg-bg">

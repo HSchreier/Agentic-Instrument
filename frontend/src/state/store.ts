@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import type { Style, Template, Pattern, VoiceId } from '@/lib/pattern'
 import { STYLES } from '@/lib/pattern'
 import type { UniversalPattern } from '@/lib/adapters'
-import { ADAPTERS } from '@/lib/adapters'
+import { ADAPTERS, toDevice, translate, toUniversal } from '@/lib/adapters'
 
 export interface Toast {
   id: string
@@ -157,14 +157,38 @@ export const useStore = create<AppStore>((set, get) => ({
     // Multi-Device (v2.0)
     deviceId: 'wolf', // Default to Rhythm Wolf
     setDeviceId: (deviceId) => {
-      const newAdapter = ADAPTERS.find((a) => a.id === deviceId)
-      if (newAdapter) {
-        set({
+      set((state) => {
+        const currentAdapter = ADAPTERS.find((a) => a.id === state.deviceId)
+        const newAdapter = ADAPTERS.find((a) => a.id === deviceId)
+
+        if (!newAdapter) return state
+
+        let newPattern = state.pattern
+
+        // Convert pattern when switching devices
+        if (currentAdapter && currentAdapter.id !== deviceId) {
+          try {
+            const currentDevicePattern = toDevice(state.pattern, currentAdapter)
+            const translatedPattern = translate(
+              currentDevicePattern,
+              currentAdapter,
+              newAdapter,
+              state.page
+            )
+            newPattern = toUniversal(translatedPattern, newAdapter, 0)
+          } catch (err) {
+            console.error('Pattern conversion failed:', err)
+            // Keep current pattern if conversion fails
+          }
+        }
+
+        return {
           deviceId,
+          pattern: newPattern,
           page: 0, // Reset to first page
           view: newAdapter.pitched ? 'device' : 'universal', // Force device view for pitched
-        })
-      }
+        }
+      })
     },
     view: 'universal',
     setView: (view) => set({ view }),
