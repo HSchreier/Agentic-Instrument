@@ -1,10 +1,12 @@
 import { useStore } from '@/state/store'
-import { generate, cycleVelocity, eventCount, STYLES, TEMPLATES } from '@/lib/pattern'
+import { cycleVelocity, eventCount, STYLES, generateUniversal } from '@/lib/adapters'
 import { Button } from '@/components/ui/Button'
 import { Knob } from '@/components/hw/Knob'
 import { Lcd } from '@/components/hw/Lcd'
 import { SequencerGrid } from '@/components/hw/SequencerGrid'
 import { MiniGrid } from '@/components/hw/MiniGrid'
+import { MachineSelector } from '@/components/hw/MachineSelector'
+import { PageButtons } from '@/components/hw/PageButtons'
 
 export function GenerateView() {
   const {
@@ -24,15 +26,13 @@ export function GenerateView() {
     clearPattern,
     patternName,
     setPatternName,
-    muted,
-    levels,
     addToast,
   } = useStore()
 
   const handleGenerate = () => {
     const newSeed = Math.floor(Math.random() * 1000000)
     setSeed(newSeed)
-    const newPattern = generate(style, template, bass, newSeed)
+    const newPattern = generateUniversal(style, template, bass, newSeed)
     setPattern(newPattern)
     addToast('success', 'Pattern created', 'Send it to your device or edit the steps here.')
   }
@@ -89,7 +89,7 @@ export function GenerateView() {
         <div className="border-t-rule border-t-rule pt-6">
           <div className="kicker">03 — Template</div>
           <div className="space-y-1">
-            {TEMPLATES.map((t) => (
+            {(['Four on the Floor', 'Half Time', 'Minimal'] as const).map((t) => (
               <label key={t} className="flex items-center gap-3 p-2 cursor-pointer">
                 <input
                   type="radio"
@@ -161,17 +161,20 @@ export function GenerateView() {
           </div>
         </div>
 
+        {/* Device selector and controls */}
+        <MachineSelector />
+
         {/* Sequencer Grid */}
         <div className="bg-ink p-6">
           <SequencerGrid
             pattern={pattern}
-            muted={muted}
-            levels={levels}
             playStep={null}
-            mode="bars"
             onCycle={handleCycleStep}
           />
         </div>
+
+        {/* Page navigation for multi-page devices */}
+        <PageButtons />
 
         {/* Footer info and buttons */}
         <div className="flex items-center justify-between text-xs text-neutral-500 px-2">

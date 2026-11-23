@@ -43,7 +43,7 @@ export function Header() {
 
         {/* Tabs */}
         <div className="flex gap-1 flex-1 px-6" role="tablist">
-          {(['Generate', 'Library', 'Chat'] as const).map((t) => (
+          {(['Generate', 'Library', 'Devices', 'Chat'] as const).map((t) => (
             <button
               key={t}
               role="tab"
@@ -57,6 +57,7 @@ export function Header() {
             >
               {t === 'Generate' && '✨ '}
               {t === 'Library' && '📚 '}
+              {t === 'Devices' && '🖥️ '}
               {t === 'Chat' && '💬 '}
               {t}
             </button>

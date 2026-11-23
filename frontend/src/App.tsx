@@ -4,6 +4,7 @@ import { ToastHost } from '@/components/ui/Toast'
 import { DevicePanel } from '@/components/app/DevicePanel'
 import { LoadedPattern } from '@/components/app/LoadedPattern'
 import { SendButton } from '@/components/app/SendButton'
+import { DevicesScreen } from '@/components/app/DevicesScreen'
 import { GenerateView } from '@/views/GenerateView'
 import { LibraryView } from '@/views/LibraryView'
 import { ChatView } from '@/views/ChatView'
@@ -21,6 +22,7 @@ export default function App() {
           {tab === 'Generate' && <GenerateView />}
           {tab === 'Library' && <LibraryView />}
           {tab === 'Chat' && <ChatView />}
+          {tab === 'Devices' && <DevicesScreen />}
         </div>
 
         {/* Device rail - persistent on desktop, top on tablet */}

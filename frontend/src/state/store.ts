@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { Style, Template, Pattern, VoiceId } from '@/lib/pattern'
 import { STYLES } from '@/lib/pattern'
-import type { UniversalPattern, Adapter } from '@/lib/adapters'
+import type { UniversalPattern } from '@/lib/adapters'
 import { ADAPTERS } from '@/lib/adapters'
 
 export interface Toast {
