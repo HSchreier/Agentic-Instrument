@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FRhythm--Wolf--MIDI--PAtchre-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre)
+[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FAgentic--Instrument-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Agentic-Instrument)
 [![Tests](https://img.shields.io/badge/Tests-38%2F38%20PASS-green?style=flat-square)](frontend/src/__tests__)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25%20Safe-3178C6?style=flat-square)](https://www.typescriptlang.org)
 [![Web MIDI](https://img.shields.io/badge/Web%20MIDI-Ready-blueviolet?style=flat-square)](https://www.w3.org/TR/webmidi/)
@@ -142,8 +142,8 @@ All devices support bidirectional pattern conversion via the universal 8×16 for
 
 ```bash
 # Clone & navigate
-git clone https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre.git
-cd Rythm-Wolf-Midi-PAtchre
+git clone https://github.com/HSchreier/Agentic-Instrument.git
+cd Agentic-Instrument
 git checkout dev
 
 # Install dependencies
@@ -192,9 +192,9 @@ The app opens at `http://localhost:5173`
 
 - **MIT License** — Use commercially, modify, redistribute
 - **No subscriptions** — No feature gates, no ads
-- **Community-driven** — Contributions welcome on [GitHub](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre)
+- **Community-driven** — Contributions welcome on [GitHub](https://github.com/HSchreier/Agentic-Instrument)
 
-We build this for musicians who love hardware. If you find value, [star the repo](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/stargazers) or [contribute](CONTRIBUTING.md).
+We build this for musicians who love hardware. If you find value, [star the repo](https://github.com/HSchreier/Agentic-Instrument/stargazers) or [contribute](CONTRIBUTING.md).
 
 ---
 
@@ -204,7 +204,7 @@ We build this for musicians who love hardware. If you find value, [star the repo
 2. **Connect your hardware** — Any MIDI device on USB
 3. **Generate a beat** — Pick a style, hit Generate
 4. **Send to your machine** — One click, pattern transmitted
-5. **Share your feedback** — [GitHub Issues](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/issues)
+5. **Share your feedback** — [GitHub Issues](https://github.com/HSchreier/Agentic-Instrument/issues)
 
 ---
 
@@ -1372,7 +1372,7 @@ A: Fully supported. The web UI works on any OS. Web MIDI support varies by brows
 
 We welcome contributions! Whether it's a bug fix, new device adapter, or feature idea:
 
-1. **Fork** the [GitHub repo](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre)
+1. **Fork** the [GitHub repo](https://github.com/HSchreier/Agentic-Instrument)
 2. **Create a branch** for your feature (`git checkout -b feature/amazing-thing`)
 3. **Commit** with clear messages
 4. **Push** and open a **PR**
@@ -1397,6 +1397,6 @@ MIT License – See [LICENSE](LICENSE) for details.
 
 **Agentic Instruments** was built for musicians who love hardware. Whether you have one drum machine or seven, we believe your creative workflow shouldn't be limited by format incompatibilities.
 
-[Star us on GitHub](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre) · [Follow on X/Twitter](#) · [Join the Discord](#)
+[Star us on GitHub](https://github.com/HSchreier/Agentic-Instrument) · [Follow on X/Twitter](#) · [Join the Discord](#)
 
-Questions? Ideas? [Open an issue](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/issues) or [start a discussion](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre/discussions).
+Questions? Ideas? [Open an issue](https://github.com/HSchreier/Agentic-Instrument/issues) or [start a discussion](https://github.com/HSchreier/Agentic-Instrument/discussions).
