@@ -31,14 +31,15 @@ describe('Agentic Instruments v2: Adapters', () => {
   }
 
   describe('Adapter Registry', () => {
-    it('should have all 6 adapters', () => {
-      expect(ADAPTERS).toHaveLength(6)
+    it('should have all 7 adapters', () => {
+      expect(ADAPTERS).toHaveLength(7)
       expect(ADAPTERS.map((a) => a.id)).toEqual([
         'wolf',
         'rytm',
         'tr8s',
         'opz',
         'volca',
+        'maschine',
         'generic',
       ])
     })
