@@ -164,6 +164,8 @@ The app opens at `http://localhost:5173`
 3. Your device appears in the list when detected
 4. Click to select
 
+> **Device not showing up?** See [**HARDWARE_SETUP.md**](HARDWARE_SETUP.md) for device-specific drivers, USB modes, and troubleshooting for all 7 machines.
+
 ### 3️⃣ Generate & Send
 
 1. Go to **Generate** tab
