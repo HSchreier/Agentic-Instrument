@@ -5,6 +5,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FAgentic--Instrument-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Agentic-Instrument)
 [![Tests](https://img.shields.io/badge/Tests-38%2F38%20PASS-green?style=flat-square)](frontend/src/__tests__)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25%20Safe-3178C6?style=flat-square)](https://www.typescriptlang.org)
+[![Security](https://img.shields.io/badge/Security-Gitleaks%20Verified-green?style=flat-square)](SECURITY_AUDIT.md)
 [![Web MIDI](https://img.shields.io/badge/Web%20MIDI-Ready-blueviolet?style=flat-square)](https://www.w3.org/TR/webmidi/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
