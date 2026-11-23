@@ -130,7 +130,9 @@ All devices support bidirectional pattern conversion via the universal 8×16 for
 
 ## 🚀 Quick Start
 
-> **🎵 For DJs & Non-Technical Users:** See [**INSTALL.md**](INSTALL.md) for step-by-step, zero-code setup. No terminal required!
+> **🎵 For DJs & Non-Technical Users:** 
+> - **📱 Fastest:** [Open Claude installer link](INSTALLER.md) — Claude guides you through everything
+> - **📖 Detailed:** [See INSTALL.md](INSTALL.md) for step-by-step, zero-code setup
 
 ### Prerequisites
 - **Any supported MIDI device** (powered on, USB or MIDI connected)
