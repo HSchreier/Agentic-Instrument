@@ -130,12 +130,14 @@ All devices support bidirectional pattern conversion via the universal 8×16 for
 
 ## 🚀 Quick Start
 
+> **🎵 For DJs & Non-Technical Users:** See [**INSTALL.md**](INSTALL.md) for step-by-step, zero-code setup. No terminal required!
+
 ### Prerequisites
 - **Any supported MIDI device** (powered on, USB or MIDI connected)
 - **Node.js** 18+ and **npm** (for local development)
 - **Modern browser** with Web MIDI support (Chrome, Edge, Opera)
 
-### 1️⃣ Setup
+### 1️⃣ Setup (Developers)
 
 ```bash
 # Clone & navigate
