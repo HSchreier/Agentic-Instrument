@@ -54,8 +54,10 @@ Describe a pattern in natural language. Claude generates it for you.
 ### (New in v2.0) Device Selector
 Auto-detect connected drum machines. Switch devices. Pattern adapts automatically.
 
-**v2.0 New Features in Screenshots Above:**
-- 🖥️ **Devices Tab** (screenshot 2) — Browse & select from 7 devices with live specs (voices, steps, pages, channel)
+![Available Devices - Browse & select from 7 drum machines](docs/screenshots/showcase-devices.jpg)
+
+**v2.0 Multi-Device Features:**
+- 🖥️ **Devices Tab** — Browse & select from 7 devices with live specs (voices, steps, pages, channel)
 - 🎛️ **Device Specs** — Each adapter shows exact topology (e.g., Rhythm Wolf: 6 voices, 16 steps, 1 page, CH 10)
 - 📊 **Dynamic Sequencer** — Adapts grid size per device (shown: Rhythm Wolf 6×16; Rytm would be 12×32, OP-Z 8×64)
 - 🔄 **Instant Switching** — Change devices without losing pattern (auto-converts to new device layout)
