@@ -51,11 +51,6 @@ Describe a pattern in natural language. Claude generates it for you.
 
 ![Chat - Natural language pattern generation](docs/screenshots/showcase-chat.jpg)
 
-### Responsive on Mobile & Tablet
-Full-featured UI on any screen size. DJ your patterns from your iPad.
-
-![Tablet View - Responsive design](docs/screenshots/showcase-tablet.jpg)
-
 ### (New in v2.0) Device Selector
 Auto-detect connected drum machines. Switch devices. Pattern adapts automatically.
 
