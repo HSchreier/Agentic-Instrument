@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useStore } from '@/state/store'
 import { cycleVelocity, eventCount, STYLES, generateUniversal } from '@/lib/adapters'
 import { Button } from '@/components/ui/Button'
@@ -7,8 +8,11 @@ import { SequencerGrid } from '@/components/hw/SequencerGrid'
 import { MiniGrid } from '@/components/hw/MiniGrid'
 import { MachineSelector } from '@/components/hw/MachineSelector'
 import { PageButtons } from '@/components/hw/PageButtons'
+import { Menu, X } from 'lucide-react'
 
 export function GenerateView() {
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(true)
+
   const {
     style,
     setStyle,
@@ -44,9 +48,43 @@ export function GenerateView() {
   }
 
   return (
-    <div className="p-6 desktop:grid desktop:grid-cols-[300px_1fr] desktop:gap-6 tablet:space-y-6">
-      {/* Controls Panel */}
-      <div className="space-y-6 border-rule desktop:border-r-rule">
+    <div className="relative h-full flex flex-col">
+      {/* Mobile Sidebar Toggle */}
+      <div className="desktop:hidden flex items-center gap-2 p-4 border-b border-neutral-700">
+        <button
+          onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
+          className="p-2 hover:bg-neutral-700 rounded transition-colors"
+          aria-label="Toggle controls panel"
+        >
+          {leftSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+        <span className="text-sm font-semibold">Controls</span>
+      </div>
+
+      <div className="flex-1 overflow-hidden grid desktop:grid-cols-[300px_1fr] gap-0">
+        {/* Left Sidebar - Controls Panel */}
+        <div
+          className={`
+            desktop:block
+            ${leftSidebarOpen ? 'block' : 'hidden'}
+            absolute desktop:relative
+            left-0 top-16 desktop:top-0
+            w-full desktop:w-auto
+            h-[calc(100vh-64px)] desktop:h-auto
+            bg-bg desktop:bg-transparent
+            z-40 desktop:z-auto
+            overflow-y-auto
+            border-r border-neutral-700 desktop:border-r-rule
+            transition-all duration-300 ease-in-out
+            -translate-x-full desktop:translate-x-0
+            ${leftSidebarOpen ? 'translate-x-0' : ''}
+          `}
+          style={{
+            transform: leftSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+            transition: 'transform 0.3s ease-in-out',
+          }}
+        >
+          <div className="space-y-6 p-6 desktop:p-0">
         {/* Style Selection */}
         <div>
           <div className="kicker">01 — Style</div>
@@ -126,10 +164,11 @@ export function GenerateView() {
             Generate pattern →
           </Button>
         </div>
-      </div>
+          </div>
+        </div>
 
-      {/* Faceplate / Main Content */}
-      <div className="space-y-4">
+        {/* Main Content Area - Faceplate & Sequencer */}
+        <div className="flex-1 overflow-y-auto space-y-4 p-6">
         {/* Top bar with LCD and knobs */}
         <div className="bg-ink text-bg p-6 shadow-md rounded-none flex justify-between items-start">
           <div>
@@ -211,6 +250,7 @@ export function GenerateView() {
         <div className="border-rule border-rule p-4 bg-bg">
           <div className="text-xs font-bold uppercase tracking-wider mb-3">Preview</div>
           <MiniGrid pattern={pattern} cellSize={8} />
+        </div>
         </div>
       </div>
     </div>
