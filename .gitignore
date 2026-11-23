@@ -16,3 +16,11 @@ backend/.venv
 *.egg-info/
 dist/
 build/
+
+# Project briefs and insights
+DESIGN_BRIEF.md
+DESIGN_IMPLEMENTATION_ANALYSIS.md
+IMPLEMENTATION_*.md
+PROJECT_DESCRIPTION.md
+ROADMAP.md
+WEB_UI_ARCHITECTURE.md
