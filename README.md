@@ -1,125 +1,235 @@
-# 🎹 Rhythm Wolf MIDI Export Toolkit
+# 🎹 Agentic Instruments v2.0 — Multi-Device MIDI Control
 
 <div align="center">
 
-[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FRhythm--Wolf--MIDI--Toolkit-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)](https://hub.docker.com)
-[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://python.org)
+[![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FRhythm--Wolf--MIDI--PAtchre-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![Web MIDI](https://img.shields.io/badge/Web%20MIDI-API-green?style=flat-square)](https://www.w3.org/TR/webmidi/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-**Generate MIDI drum patterns with Claude. Send real-time beats to your Akai Rhythm Wolf via a beautiful web UI.**
+**Generate and send MIDI drum patterns to 7 different drum machines via a universal 8×16 pattern format with seamless device switching.**
 
-[Features](#-features) • [Web UI](#-web-ui-new) • [Quick Start](#-quick-start) • [Architecture](#-architecture)
+[Features](#-features) • [Supported Devices](#-supported-devices) • [Quick Start](#-quick-start) • [Architecture](#-architecture)
 
 ---
 
-🚀 **New:** Professional web UI with hardware-inspired faceplate design, 16-step sequencer, and Claude integration!  
-✨ **Status:** ✅ **All phases complete!** Phases 1-9: Foundation, Web UI, Device Rail & Send, Library, Chat, Polish animations.
+🚀 **v2.0: Multi-Device Architecture** — Universal pattern format, automatic device detection, pattern auto-conversion  
+✨ **Status:** ✅ **All phases complete!** Phases 1-3: Foundation (Adapters), State Management, React Components, Web MIDI Integration
 
 </div>
 
 ---
 
-## 📸 App Screenshots
-
-### Generate Tab – Pattern Editor
-![Generate Tab - Create MIDI patterns with hardware-inspired controls](docs/screenshots/showcase-generate.jpg)
-
-### Library Tab – Preset Browser
-![Library Tab - Browse and load preset patterns](docs/screenshots/showcase-library.jpg)
-
-### Chat Tab – Natural Language Generation
-![Chat Tab - Describe patterns in English](docs/screenshots/showcase-chat.jpg)
-
-### Responsive Design
-![Tablet View - Responsive layout on smaller screens](docs/screenshots/showcase-tablet.jpg)
-
----
-
 ## ✨ Features
 
+### Core
 🎵 **Generate patterns** in multiple styles (Techno, House, Tech House, Minimal, D&B)  
-🎛️ **Send real-time MIDI** via USB or 5-pin MIDI—device quantizes automatically  
-💬 **Chat interface** powered by Claude—natural language pattern generation  
-📚 **Pattern library** with 15 industry-standard presets + save/search/favorite  
-🌐 **Professional web UI** built with React 18, TypeScript, Tailwind CSS, Vite  
-🎚️ **Hardware faceplate** design with 16-step sequencer grid and draggable knobs  
-🧠 **Beat tokenization** — Semantic token-based pattern representation for AI understanding
-📡 **Prime factorization (PoC)** — Experimental compression via Gödel numbering + FFT  
-📦 **Fully containerized** with Docker—no version conflicts, works everywhere  
-⚡ **CLI-first** design for scripting and automation  
-💾 **Save & load** patterns as JSON for reuse  
-🔄 **FastAPI backend** for all pattern operations  
-♿ **Accessible UI** with keyboard navigation, WCAG AA compliant
+🎛️ **7 drum machine adapters** — Seamless switching between devices with auto-pattern conversion  
+🔄 **Universal 8×16 pattern format** — Kick, Snare, Clap, Tom, Perc, Closed Hat, Open Hat, Bass  
+📱 **Web MIDI integration** — Auto-detect connected devices, real-time pattern transmission  
+🖥️ **Device selector** — Browse, detect, and switch devices with live pattern adaptation  
+
+### UI & Control
+🎚️ **Hardware-inspired faceplate** — Device-specific voice strips with per-voice knobs  
+📊 **Dynamic sequencer grid** — Adapts to device topology (16/32/64 steps, 1-4 pages)  
+🔀 **Multi-page navigation** — Support for devices like Rytm (2p) and OP-Z (4p)  
+📝 **Pattern library** with preset management + save/search/favorite  
+💬 **Chat interface** — Natural language pattern generation (Claude integration ready)
+
+### Technical
+🌐 **Professional web UI** — React 18, TypeScript, Tailwind CSS, Vite  
+🧪 **Fully tested** — 38 unit tests, TypeScript type-safe (0 errors)  
+⚡ **Zustand state** — Multi-device aware with per-device knobs & mutes  
+📡 **Bidirectional translation** — Universal ↔ Device-specific pattern conversion  
+♿ **Accessible** — Keyboard navigation, WCAG AA compliant
+
+## 🎯 Supported Devices
+
+| Device | Voices | Steps | Pages | Channel | Status |
+|--------|--------|-------|-------|---------|--------|
+| **Akai Rhythm Wolf** | 6 | 16 | 1 | 10 | ✅ Full |
+| **Elektron Analog Rytm MKII** | 12 | 32 | 2 | 10 | ✅ Full |
+| **Roland TR-8S** | 11 | 16 | 1 | 10 | ✅ Full |
+| **Teenage Engineering OP-Z** | 8 | 64 | 4 | 1–8 | ✅ Full |
+| **Korg Volca Keys** | 8 | 16 | 1 | 1 | ✅ Pitched |
+| **Native Instruments Maschine MK3** | 16 | 16 | 1 | 10 | ✅ Full |
+| **Generic MIDI (GM)** | 9 | 16 | 1 | 10 | ✅ Fallback |
+
+All devices support bidirectional pattern conversion via the universal 8×16 format.
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Akai Rhythm Wolf** (powered on, USB or MIDI connected)
-- **Docker Desktop** installed (for backend)
-- **Node.js** 18+ and **Bun** (for web UI, optional for Docker-only setup)
+- **Any supported MIDI device** (powered on, USB or MIDI connected)
+- **Node.js** 18+ and **npm** (for local development)
+- **Modern browser** with Web MIDI support (Chrome, Edge, Opera)
 
 ### 1️⃣ Setup
 
 ```bash
 # Clone & navigate
-git clone https://github.com/HSchreier/Rhythm-Wolf-MIDI-Toolkit.git
-cd Rhythm-Wolf-MIDI-Toolkit
+git clone https://github.com/HSchreier/Rythm-Wolf-Midi-PAtchre.git
+cd Rythm-Wolf-Midi-PAtchre
 git checkout dev
 
-# Build the image
-make build
+# Install dependencies
+cd frontend
+npm install
+
+# Start dev server
+npm run dev
 ```
 
-### 2️⃣ Check Devices
+The app opens at `http://localhost:5173`
 
-```bash
-make devices
+### 2️⃣ Connect Your Device
+
+1. Connect MIDI device via USB or MIDI adapter
+2. Open the **Devices** tab (🖥️)
+3. Your device appears in the list when detected
+4. Click to select
+
+### 3️⃣ Generate & Send
+
+1. Go to **Generate** tab
+2. Choose style, tempo, template
+3. Click "Generate pattern →"
+4. Click "Send Events →" to transmit to device
+
+---
+
+## 🏗️ Architecture
+
+### Core Concepts
+
+**Universal Pattern Format (8×16)**
+```
+8 drum parts (rows):   Kick, Snare, Clap, Tom, Perc, Closed Hat, Open Hat, Bass
+16 steps (columns):    0–15 (1 bar at any tempo)
+Velocities:            0–127 (0=off, 1–127=on with velocity)
 ```
 
-Output:
+**Adapter Pattern**
+Each device has an Adapter that defines:
+- Voice count & topology (Kick on pad 1, Snare on pad 2, etc.)
+- Step capacity (16/32/64 steps)
+- Page layout (1–4 pages for multi-page devices)
+- Part mappings (which adapter voice plays which universal part)
+
+**Bidirectional Translation**
 ```
-Available MIDI output devices:
-  1. Akai Rhythm Wolf
-  2. IAC Driver Bus 1
+Universal (8×16)
+    ↓ toDevice()     ↑ toUniversal()
+Device-specific (device.voices × device.steps)
 ```
 
-### 3️⃣ Generate a Pattern
-
-```bash
-make generate
+Device switching auto-converts via `translate()`:
+```
+Device A pattern → toUniversal() → Universal → toDevice() → Device B pattern
 ```
 
-Returns JSON:
-```json
+### Frontend Structure
+
+```
+frontend/src/
+├── lib/
+│   ├── adapters/          # Multi-device abstraction layer
+│   │   ├── types.ts       # Adapter definitions (7 devices)
+│   │   ├── protocol.ts    # toDevice/toUniversal/translate logic
+│   │   └── migration.ts   # v1.0 → v2.0 pattern conversion
+│   ├── midi.ts            # Web MIDI API manager
+│   └── pattern.ts         # Generation & analysis
+├── state/
+│   └── store.ts           # Zustand (multi-device state, per-device knobs/mutes)
+├── components/
+│   ├── hw/                # Hardware-inspired UI
+│   │   ├── SequencerGrid.tsx    # Device-aware grid (dynamic dimensions)
+│   │   ├── Faceplate.tsx        # Per-voice knobs & mutes
+│   │   ├── MachineSelector.tsx  # Device selector in header
+│   │   ├── PageButtons.tsx      # Multi-page navigation
+│   │   └── VoiceLabel.tsx       # Dynamic voice rendering
+│   ├── app/
+│   │   ├── DevicesScreen.tsx    # Device discovery UI
+│   │   └── SendButton.tsx       # Pattern transmission
+│   └── ui/                # Generic UI components
+├── hooks/
+│   └── useMIDIDevices.ts  # Detector + sync to store
+└── views/
+    ├── GenerateView.tsx   # Pattern editor
+    ├── LibraryView.tsx    # Pattern library
+    └── ChatView.tsx       # Natural language (Claude integration ready)
+
+Tests: 38 unit tests (Adapters, Translation, Migration)
+```
+
+### State Management (Zustand)
+
+```typescript
+// Multi-device aware store
 {
-  "metadata": {
-    "style": "techno",
-    "tempo": 128,
-    "num_events": 24
-  },
-  "events": [
-    {"channel": 10, "note": 36, "velocity": 127},
-    ...
-  ]
+  // Current device context
+  deviceId: 'wolf' | 'rytm' | 'tr8s' | 'opz' | 'volca' | 'maschine' | 'generic'
+  pattern: UniversalPattern  // Always 8×16
+  view: 'universal' | 'device'  // Render mode
+  page: number  // Current page (0–3)
+  
+  // Per-device state (namespaced)
+  knobs: { `${deviceId}:${voiceIndex}:${knobIndex}`: 0–100 }
+  deviceMuted: { `${deviceId}:${voiceIndex}`: boolean }
+  detected: { [deviceId]: boolean }  // Connection status
 }
 ```
 
-### 4️⃣ Send to Device
+### Web MIDI Integration
 
-```bash
-make send
+**Startup Flow**
+```
+App mounts
+  ↓
+useMIDIDevices() hook
+  ↓
+midiManager.init()
+  ↓
+getAdapterByPort() matches devices to adapters
+  ↓
+setDetected() updates Zustand store
+  ↓
+User can now select device & send patterns
 ```
 
-Then:
-1. **On the Rhythm Wolf:** Hold SHIFT + press Step 10 (enters Record Performance mode)
-2. **In the CLI:** Press Enter
-3. **Watch:** Device quantizes and records MIDI in real-time
-4. **Save:** Hold SHIFT + press Step 16 (SAVE) on the device
+**Send Flow**
+```
+User clicks "Send Events"
+  ↓
+toDevice(universal, adapter)  // Convert 8×16 → device-specific
+  ↓
+midiManager.sendPattern(deviceId, devicePattern)
+  ↓
+For each step with velocity > 0:
+  - Construct MIDI message (channel, note, velocity)
+  - Send via Web MIDI output port
+  ↓
+Toast confirmation
+```
 
-✅ Pattern saved to internal memory!
+### Testing
+
+```bash
+npm run test -- --run          # 38 tests (all pass)
+npm run type-check            # TypeScript (0 errors)
+npm run lint                  # ESLint (Phase 3 code clean)
+```
+
+Test coverage:
+- ✅ 7 adapters registered correctly
+- ✅ Universal ↔ Device translation
+- ✅ Device switching with pattern conversion
+- ✅ Multi-page device support
+- ✅ Pattern analysis & density
+- ✅ v1.0 → v2.0 migration
 
 ## 💻 Running the Web UI
 

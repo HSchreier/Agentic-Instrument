@@ -16,25 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: "18"
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm ci
 
       - name: Type check
-        run: bun run type-check
+        run: npm run type-check
 
       - name: Lint
-        run: bun run lint || true  # Non-blocking
+        run: npm run lint || true  # Non-blocking
 
       - name: Run tests
-        run: bun run test || true
+        run: npm run test -- --run
 
-      - name: Generate coverage
-        run: bun run test:coverage || true
+      - name: Build
+        run: npm run build
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -107,14 +107,16 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
 
       - name: Build frontend
         working-directory: ./frontend
         run: |
-          bun install --frozen-lockfile
-          bun run build
+          npm ci
+          npm run build
 
       - name: Verify backend
         working-directory: ./backend
