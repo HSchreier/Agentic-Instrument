@@ -59,9 +59,11 @@ Full-featured UI on any screen size. DJ your patterns from your iPad.
 ### (New in v2.0) Device Selector
 Auto-detect connected drum machines. Switch devices. Pattern adapts automatically.
 
-🖥️ **Devices Screen** — Coming: Screenshot showing 7 devices with connection status  
-🎛️ **Faceplate** — Coming: Device-specific knobs & voice controls  
-📊 **Multi-Page Grid** — Coming: Sequencer adapting to 64-step OP-Z or 32-step Rytm
+**v2.0 New Features in Screenshots Above:**
+- 🖥️ **Devices Tab** (screenshot 2) — Browse & select from 7 devices with live specs (voices, steps, pages, channel)
+- 🎛️ **Device Specs** — Each adapter shows exact topology (e.g., Rhythm Wolf: 6 voices, 16 steps, 1 page, CH 10)
+- 📊 **Dynamic Sequencer** — Adapts grid size per device (shown: Rhythm Wolf 6×16; Rytm would be 12×32, OP-Z 8×64)
+- 🔄 **Instant Switching** — Change devices without losing pattern (auto-converts to new device layout)
 
 ---
 

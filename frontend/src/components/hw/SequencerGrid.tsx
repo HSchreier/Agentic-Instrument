@@ -90,6 +90,7 @@ export function SequencerGrid({ adapter, pattern, playStep, onCycle }: Sequencer
                       const isPlayhead = playStep === globalStep
                       const isMuted = deviceMuted[`${selectedAdapter.id}:${voiceIdx}`]
 
+                      const voiceName = selectedAdapter.voices[voiceIdx]?.name || `Voice ${voiceIdx}`
                       return (
                         <StepPad
                           key={stepIdx}
@@ -99,7 +100,7 @@ export function SequencerGrid({ adapter, pattern, playStep, onCycle }: Sequencer
                           level={isMuted ? 40 : 100}
                           mode="bars"
                           onCycle={() => handleCycle(voiceIdx, stepIdx)}
-                          ariaLabel={`${selectedAdapter.voices[voiceIdx].name} step ${globalStep + 1}`}
+                          ariaLabel={`${voiceName} step ${globalStep + 1}`}
                         />
                       )
                     })}
