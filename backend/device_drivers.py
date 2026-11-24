@@ -403,10 +403,72 @@ class GenericMIDIDriver(GenericMIDIAdapter):
             return False
 
 
+# ========== ELEKTRON DIGITAKT 2 (8 drums, 16 steps, CH 10) ==========
+class DigitaktDriver(RhythmWolfAdapter):
+    """Elektron Digitakt 2 - 8 drum tracks × 16 steps"""
+    id = "elektron-digitakt-2"
+    name = "Elektron Digitakt 2"
+    voices = 8
+    pages = 1
+    MIDI_CHANNEL = 9
+
+    VOICE_NOTES = {
+        0: 36,  # Drum 1 (Kick)
+        1: 38,  # Drum 2 (Snare)
+        2: 42,  # Drum 3 (Closed Hat)
+        3: 46,  # Drum 4 (Open Hat)
+        4: 43,  # Drum 5 (Tom)
+        5: 50,  # Drum 6 (Perc)
+        6: 51,  # Drum 7
+        7: 52,  # Drum 8
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.port_name = None
+
+    def connect(self, port: str) -> bool:
+        try:
+            midi_port = midi_driver.open_output(port)
+            if midi_port:
+                self.port_name = port
+                self._online = True
+                logger.info(f"✅ Connected Elektron Digitakt 2 on {port}")
+                return True
+        except Exception as e:
+            logger.error(f"Digitakt 2 connect failed: {e}")
+        return False
+
+    def disconnect(self) -> bool:
+        if self.port_name:
+            midi_driver.close_output(self.port_name)
+            self._online = False
+            self.port_name = None
+        return True
+
+    def send_pattern(self, pattern: List[List[int]], velocity: int = 100) -> bool:
+        if not self._online or not self.port_name:
+            return False
+        try:
+            sent = 0
+            for voice_idx in range(min(8, len(pattern))):
+                note = self.VOICE_NOTES.get(voice_idx, 36)
+                for vel in pattern[voice_idx]:
+                    if vel > 0:
+                        midi_driver.send_note_on(self.port_name, note, min(vel, 127), self.MIDI_CHANNEL)
+                        sent += 1
+            logger.info(f"Digitakt 2: sent {sent} events")
+            return True
+        except Exception as e:
+            logger.error(f"Digitakt 2 send failed: {e}")
+            return False
+
+
 # ========== DRIVER REGISTRY ==========
 DRIVER_MAP = {
     'rhythm-wolf': RhythmWolfDriver,
     'elektron-rytm-mkii': ElektronRytmDriver,
+    'elektron-digitakt-2': DigitaktDriver,
     'roland-tr8s': RolandTR8SDriver,
     'op-z': OPZDriver,
     'volca-keys': VulcaKeysDriver,

@@ -6,6 +6,7 @@ import pytest
 from device_drivers import (
     RhythmWolfDriver,
     ElektronRytmDriver,
+    DigitaktDriver,
     RolandTR8SDriver,
     OPZDriver,
     VulcaKeysDriver,
@@ -63,6 +64,35 @@ class TestElektronRytmDriver:
         for i in range(12):
             assert i in driver.VOICE_NOTES
             assert 30 < driver.VOICE_NOTES[i] < 65  # Valid MIDI range
+
+
+class TestDigitaktDriver:
+    """Elektron Digitakt 2: 8 drums × 16 steps"""
+
+    def test_metadata(self):
+        driver = DigitaktDriver()
+        assert driver.id == "elektron-digitakt-2"
+        assert driver.name == "Elektron Digitakt 2"
+        assert driver.voices == 8
+        assert driver.pages == 1
+        assert driver.MIDI_CHANNEL == 9
+
+    def test_8_drum_voices(self):
+        driver = DigitaktDriver()
+        # Verify all 8 drums have MIDI notes
+        for i in range(8):
+            assert i in driver.VOICE_NOTES
+            note = driver.VOICE_NOTES[i]
+            assert 36 <= note <= 52
+
+    def test_digitakt_sending(self):
+        """Digitakt 2 accepts 8×16 drum pattern"""
+        driver = DigitaktDriver()
+        driver._online = True
+        driver.port_name = "mock"
+
+        pattern = [[60 + i] * 16 for i in range(8)]
+        assert driver.send_pattern(pattern) == True
 
 
 class TestRolandTR8SDriver:
@@ -160,6 +190,7 @@ class TestDeviceFactory:
         device_ids = [
             'rhythm-wolf',
             'elektron-rytm-mkii',
+            'elektron-digitakt-2',
             'roland-tr8s',
             'op-z',
             'volca-keys',
@@ -182,6 +213,7 @@ class TestDeviceFactory:
         drivers = [
             RhythmWolfDriver(),
             ElektronRytmDriver(),
+            DigitaktDriver(),
             RolandTR8SDriver(),
             OPZDriver(),
             VulcaKeysDriver(),

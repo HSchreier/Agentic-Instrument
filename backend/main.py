@@ -47,7 +47,9 @@ def list_devices():
         port_lower = port.name.lower()
         if 'wolf' in port_lower:
             device_type = 'rhythm-wolf'
-        elif 'rytm' in port_lower or 'elektron' in port_lower:
+        elif 'digitakt' in port_lower:
+            device_type = 'elektron-digitakt-2'
+        elif 'rytm' in port_lower or ('elektron' in port_lower and 'rytm' in port_lower):
             device_type = 'elektron-rytm-mkii'
         elif 'tr-8s' in port_lower or 'tr8s' in port_lower:
             device_type = 'roland-tr8s'
