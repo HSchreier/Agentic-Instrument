@@ -3,7 +3,7 @@
 <div align="center">
 
 [![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FAgentic--Instrument-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Agentic-Instrument)
-[![Release](https://img.shields.io/badge/Release-v2.1.0-blue?style=flat-square)](https://github.com/HSchreier/Agentic-Instrument/releases/tag/v2.1.0)
+[![Release](https://img.shields.io/badge/Release-v2.2.0--rc.1-yellow?style=flat-square)](https://github.com/HSchreier/Agentic-Instrument/releases/tag/v2.2.0-rc.1)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)](docker-compose.yml)
 [![Tests](https://img.shields.io/badge/Tests-78%2F78%20PASS-green?style=flat-square)](backend/tests)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25%20Safe-3178C6?style=flat-square)](https://www.typescriptlang.org)
@@ -15,7 +15,7 @@
 
 Send the same 8×16 beat to 8 drum machines: Rhythm Wolf, Elektron Rytm MKII, Elektron Digitakt 2, Roland TR-8S, OP-Z, Volca Keys, Maschine MK3—or any MIDI device. No manual re-mapping. No incompatible formats. Just **connect, switch, and send.**
 
-**v2.1.0 — Now with native MIDI drivers & Docker! 🐳**
+**v2.2.0-rc.1 — Release candidate with CI fixes & improved setup! 🚀**
 
 [Why?](#why-agentic-instruments) • [Demo](#-live-demo) • [Features](#-why-musicians-love-it) • [Use Cases](#-use-cases) • [Devices](#🎯-supported-devices) • [Compare](#-how-it-compares) • [Quick Start](#-quick-start) • [Tech](#-architecture)
 
@@ -187,30 +187,51 @@ docker-compose up --build
 *Best for: Quick testing, Chrome/Edge/Opera users, development*
 
 **Prerequisites:**
-- **Node.js** 18+ and **npm**
+- **Node.js** 22+ and **npm** (managed via nvm)
+- **Python** 3.11+ (managed via pyenv)
 - **Modern browser** with Web MIDI support (Chrome, Edge, Opera)
 - **Any supported MIDI device** (powered on, USB connected)
 
-**Setup:**
+**Automated Setup (Recommended):**
 ```bash
 # Clone & navigate
 git clone https://github.com/HSchreier/Agentic-Instrument.git
 cd Agentic-Instrument
 git checkout dev
 
-# Install dependencies
-cd frontend
-npm install
+# One command sets up Node 22, Python 3.11, and all dependencies
+source scripts/setup-dev-env.sh   # bash
+# or
+source scripts/setup-dev-env.fish  # fish
+```
 
-# Start dev server
-npm run dev
+**Manual Setup:**
+```bash
+# If you prefer manual version control
+nvm use 22
+cd backend && pyenv local 3.11 && cd ..
+npm ci                    # frontend deps
+pip install -r requirements.txt  # backend deps
+```
+
+**Start Development:**
+```bash
+# Frontend (in one terminal)
+cd frontend && npm run dev
+
+# Backend (in another terminal)
+cd backend && python -m main
 ```
 
 **Access:**
 - Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000`
 - Uses browser Web MIDI API (some driver limitations on Windows/Mac)
 
 **Note:** Some users report USB driver issues. If your device doesn't appear, upgrade to **v2.1 (Docker)** above.
+
+**More Info:**
+- See [DEVELOPER_SETUP.md](DEVELOPER_SETUP.md) for detailed environment docs
 
 ### 2️⃣ Connect Your Device
 
