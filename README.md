@@ -141,6 +141,14 @@ No plugins. No DAW required. Open a tab, connect your hardware via USB, and star
 > - **📱 Fastest:** [Open Claude installer link](INSTALLER.md) — Claude guides you through everything
 > - **📖 Detailed:** [See INSTALL.md](INSTALL.md) for step-by-step, zero-code setup
 
+### Prerequisites (Download These First)
+
+| Tool | Purpose | Download |
+|------|---------|----------|
+| **Docker Desktop** (v2.1) | Recommended for all users | [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop) |
+| **Claude Desktop** (Optional) | For AI-powered setup help | [claude.ai/download](https://claude.ai/download) |
+| **Node.js** (v2.0 only) | Only if skipping Docker | [nodejs.org](https://nodejs.org) |
+
 ### Installation Options
 
 #### **Option A: v2.1 — Containerized (Docker) — RECOMMENDED** 🐳
