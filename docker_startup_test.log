@@ -1,0 +1,35 @@
+=== Agentic Instrument v2.1 Container Startup ===
+
+Expected on docker-compose up:
+1. Backend service (port 5000)
+   - Flask app starts
+   - mido discovers MIDI ports
+   - WebSocket server ready
+   
+2. Frontend service (port 3000)
+   - Vite dev server starts
+   - React app bundles
+   - Ready for development
+
+Expected endpoints:
+- http://localhost:3000 → React frontend
+- http://localhost:5000/api/health → Backend health check
+- ws://localhost:5000/socket.io → WebSocket (browser)
+
+Device drivers available:
+✅ rhythm-wolf (6 voices)
+✅ elektron-rytm-mkii (12 voices)
+✅ elektron-digitakt-2 (8 voices)
+✅ roland-tr8s (11 voices)
+✅ op-z (8 voices, multi-channel)
+✅ volca-keys (8 pitched synth)
+✅ maschine-mk3 (16 pads)
+✅ generic-midi (9 voices, fallback)
+
+Test Commands:
+  curl http://localhost:5000/api/health
+  curl http://localhost:5000/api/devices
+  docker stats agentic-instrument
+
+Memory Target: <500MB steady state
+CPU Target: <50% under load
