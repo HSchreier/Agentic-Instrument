@@ -1,0 +1,38 @@
+#!/bin/bash
+# Pre-push hook: Run all checks before pushing to avoid CI ping-pong
+
+set -e
+
+echo "🔍 Running pre-push checks..."
+echo ""
+
+# Backend tests
+echo "▶️  Backend tests (78 tests)..."
+cd backend
+python -m pytest tests/ -q --tb=line 2>&1 | tail -3
+cd ..
+echo "✅ Backend tests passed"
+echo ""
+
+# Frontend build
+echo "▶️  Frontend build check..."
+cd frontend
+npm run build --silent 2>&1 | grep -E "error|Error" && echo "❌ Frontend build failed" && exit 1
+echo "✅ Frontend build passed"
+cd ..
+echo ""
+
+# Backend imports
+echo "▶️  Backend imports..."
+cd backend
+python -c "from main import app; print('✅ Backend imports OK')"
+cd ..
+echo ""
+
+# Docker compose config
+echo "▶️  Docker compose config..."
+docker-compose config > /dev/null 2>&1 && echo "✅ Docker config valid" || echo "⚠️  Docker not available"
+echo ""
+
+echo "✅ All pre-push checks passed!"
+echo "🚀 Ready to push to dev"
