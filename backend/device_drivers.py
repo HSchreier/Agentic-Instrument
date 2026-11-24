@@ -10,10 +10,10 @@ from midi_driver import midi_driver
 logger = logging.getLogger(__name__)
 
 
-# ========== RHYTHM WOLF (6 voices, 16 steps, CH 10) ==========
+# ========== RHYTHM WOLF (6 voices, 16 steps, CH 1) ==========
 class RhythmWolfDriver(RhythmWolfAdapter):
     """Akai Rhythm Wolf"""
-    MIDI_CHANNEL = 9
+    MIDI_CHANNEL = 0  # Channel 1 (0-indexed) - verified against official manual
     VOICE_NOTES = {
         0: 36,  # Kick
         1: 38,  # Snare
@@ -262,6 +262,7 @@ class VulcaKeysDriver(RhythmWolfAdapter):
     voices = 8
     pages = 1
     pitched = True  # Pitched synth, not drums
+    MIDI_CHANNEL = 0  # Channel 1 (0-indexed) - verified against official manual
 
     def __init__(self):
         super().__init__()
@@ -358,9 +359,34 @@ class MaschineMK3Driver(RhythmWolfAdapter):
             return False
 
 
-# ========== GENERIC MIDI (9 voices, 16 steps, CH 10) ==========
+# ========== GENERIC MIDI (16 voices, 16 steps, CH 10) ==========
 class GenericMIDIDriver(GenericMIDIAdapter):
-    """Generic MIDI Device - fallback for any MIDI device"""
+    """Generic MIDI Device - full General MIDI drum map (notes 36-51)"""
+    id = "generic-midi"
+    name = "Generic MIDI Device"
+    voices = 16
+    pages = 1
+    MIDI_CHANNEL = 9
+
+    # Full General MIDI drum map
+    VOICE_NOTES = {
+        0: 36,   # Bass Drum 1
+        1: 37,   # Side Stick
+        2: 38,   # Acoustic Snare
+        3: 39,   # Hand Clap
+        4: 40,   # Acoustic Bass Drum 2
+        5: 41,   # Bass Drum 2
+        6: 42,   # Closed Hi-Hat
+        7: 43,   # Pedal Hi-Hat
+        8: 44,   # Pedal Hi-Hat 2
+        9: 45,   # Open Hi-Hat
+        10: 46,  # Open Hi-Hat 2
+        11: 47,  # Open Hi-Hat Pedal
+        12: 48,  # Acoustic Tom
+        13: 49,  # Muted Hi-Tom
+        14: 50,  # Acoustic Perc
+        15: 51,  # Open Perc
+    }
 
     def __init__(self):
         super().__init__()
@@ -390,11 +416,11 @@ class GenericMIDIDriver(GenericMIDIAdapter):
             return False
         try:
             sent = 0
-            for voice_idx in range(min(9, len(pattern))):
-                note = 36 + voice_idx  # C1–G1
+            for voice_idx in range(min(16, len(pattern))):  # Support full 16 GM drums
+                note = self.VOICE_NOTES.get(voice_idx, 36 + voice_idx)
                 for vel in pattern[voice_idx]:
                     if vel > 0:
-                        midi_driver.send_note_on(self.port_name, note, min(vel, 127), 9)
+                        midi_driver.send_note_on(self.port_name, note, min(vel, 127), self.MIDI_CHANNEL)
                         sent += 1
             logger.info(f"Generic MIDI: sent {sent} events")
             return True

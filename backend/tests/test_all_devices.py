@@ -25,7 +25,7 @@ class TestRhythmWolfDriver:
         assert driver.name == "Akai Rhythm Wolf"
         assert driver.voices == 6
         assert driver.pages == 1
-        assert driver.MIDI_CHANNEL == 9
+        assert driver.MIDI_CHANNEL == 0  # Channel 1 (official manual)
 
     def test_voice_mapping(self):
         driver = RhythmWolfDriver()
@@ -173,13 +173,13 @@ class TestMaschineMK3Driver:
 
 
 class TestGenericMIDIDriver:
-    """Generic MIDI: 9 voices × 16 steps (fallback)"""
+    """Generic MIDI: 16 voices × 16 steps (full General MIDI drum map)"""
 
     def test_metadata(self):
         driver = GenericMIDIDriver()
         assert driver.id == "generic-midi"
         assert driver.name == "Generic MIDI Device"
-        assert driver.voices == 9
+        assert driver.voices == 16  # Full GM drum map (notes 36-51)
         assert driver.pages == 1
 
 
@@ -279,14 +279,22 @@ class TestMIDIChannels:
     def test_channel_10_devices(self):
         """Drums on channel 10 (0-indexed as 9)"""
         devices = [
-            RhythmWolfDriver(),
             ElektronRytmDriver(),
             RolandTR8SDriver(),
             MaschineMK3Driver(),
         ]
-        
+
         for driver in devices:
-            assert driver.MIDI_CHANNEL == 9
+            assert driver.MIDI_CHANNEL == 9  # Channel 10
+
+    def test_channel_1_devices(self):
+        """Some devices use channel 1 (0-indexed as 0)"""
+        devices = [
+            RhythmWolfDriver(),  # Akai Rhythm Wolf (official manual)
+        ]
+
+        for driver in devices:
+            assert driver.MIDI_CHANNEL == 0  # Channel 1
 
     def test_opz_uses_channels_0_to_7(self):
         """OP-Z uses all channels 1-8 (0-indexed 0-7)"""
