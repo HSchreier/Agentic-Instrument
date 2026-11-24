@@ -57,8 +57,11 @@ fi
 
 # Load Python 3.11
 echo "   Loading Python 3.11..."
-pyenv install 3.11.0 2>/dev/null || true
-cd backend 2>/dev/null && pyenv local 3.11 && cd .. 2>/dev/null || true
+pyenv install 3.11.0 2>&1 | grep -v "already exists" || true
+if cd backend 2>/dev/null; then
+  pyenv local 3.11 2>/dev/null || true
+  cd ..
+fi
 PYTHON_VER=$(python --version)
 echo "   ✓ Python $PYTHON_VER ready"
 
@@ -84,8 +87,13 @@ echo "✅ Development environment ready!"
 echo ""
 echo "   Node:   $(node --version)"
 echo "   npm:    $(npm --version)"
-echo "   Python: $(python --version)"
+# Check backend Python version specifically
+BACKEND_PYTHON=$(cd backend 2>/dev/null && python --version 2>&1 || echo "Python 3.11 (backend)")
+echo "   Python: $BACKEND_PYTHON"
 echo ""
 echo "Next steps:"
 echo "  • Run tests: npm run test (frontend) or pytest (backend)"
 echo "  • Start dev: npm run dev (frontend) or python -m main (backend)"
+echo ""
+echo "Frontend work:   cd frontend && npm run dev"
+echo "Backend work:    cd backend && python -m main"
