@@ -3,15 +3,19 @@
 <div align="center">
 
 [![GitHub](https://img.shields.io/badge/GitHub-HSchreier%2FAgentic--Instrument-blue?style=flat-square&logo=github)](https://github.com/HSchreier/Agentic-Instrument)
-[![Tests](https://img.shields.io/badge/Tests-38%2F38%20PASS-green?style=flat-square)](frontend/src/__tests__)
+[![Release](https://img.shields.io/badge/Release-v2.1.0-blue?style=flat-square)](https://github.com/HSchreier/Agentic-Instrument/releases/tag/v2.1.0)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)](docker-compose.yml)
+[![Tests](https://img.shields.io/badge/Tests-61%2F61%20PASS-green?style=flat-square)](backend/tests)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25%20Safe-3178C6?style=flat-square)](https://www.typescriptlang.org)
 [![Security](https://img.shields.io/badge/Security-Gitleaks%20Verified-green?style=flat-square)](SECURITY_AUDIT.md)
-[![Web MIDI](https://img.shields.io/badge/Web%20MIDI-Ready-blueviolet?style=flat-square)](https://www.w3.org/TR/webmidi/)
+[![Devices](https://img.shields.io/badge/Devices-8%20Supported-purple?style=flat-square)](#-supported-devices)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 ### **Write patterns once, play on any drum machine.**
 
-Send the same 8×16 beat to your Rhythm Wolf, Elektron Rytm, Roland TR-8S, OP-Z, Volca Keys, Maschine MK3—or any MIDI device. No manual re-mapping. No incompatible formats. Just **connect, switch, and send.**
+Send the same 8×16 beat to 8 drum machines: Rhythm Wolf, Elektron Rytm MKII, Elektron Digitakt 2, Roland TR-8S, OP-Z, Volca Keys, Maschine MK3—or any MIDI device. No manual re-mapping. No incompatible formats. Just **connect, switch, and send.**
+
+**v2.1.0 — Now with native MIDI drivers & Docker! 🐳**
 
 [Why?](#why-agentic-instruments) • [Demo](#-live-demo) • [Features](#-why-musicians-love-it) • [Use Cases](#-use-cases) • [Devices](#🎯-supported-devices) • [Compare](#-how-it-compares) • [Quick Start](#-quick-start) • [Tech](#-architecture)
 
@@ -35,7 +39,7 @@ Send the same 8×16 beat to your Rhythm Wolf, Elektron Rytm, Roland TR-8S, OP-Z,
 
 ## 📸 Live Demo
 
-> **Note:** These screenshots show v2.0 with multi-device support (dev branch). Click to expand.
+> **Current Version:** v2.1.0 (Containerized) on `dev` branch with 8 device support. Click to expand.
 
 ### Generate Patterns with Style
 Create beats in Techno, House, Minimal, D&B, or Tech House—with tempo control, swing, and variation.
@@ -93,13 +97,15 @@ No plugins. No DAW required. Open a tab, connect your hardware via USB, and star
 |--------|--------|-------|-------|---------|--------|
 | **Akai Rhythm Wolf** | 6 | 16 | 1 | 10 | ✅ Full |
 | **Elektron Analog Rytm MKII** | 12 | 32 | 2 | 10 | ✅ Full |
+| **Elektron Digitakt 2** | 8 | 16 | 1 | 10 | ✅ Full |
 | **Roland TR-8S** | 11 | 16 | 1 | 10 | ✅ Full |
 | **Teenage Engineering OP-Z** | 8 | 64 | 4 | 1–8 | ✅ Full |
 | **Korg Volca Keys** | 8 | 16 | 1 | 1 | ✅ Pitched |
 | **Native Instruments Maschine MK3** | 16 | 16 | 1 | 10 | ✅ Full |
 | **Generic MIDI (GM)** | 9 | 16 | 1 | 10 | ✅ Fallback |
 
-All devices support bidirectional pattern conversion via the universal 8×16 format.
+**All 8 devices** support bidirectional pattern conversion via the universal 8×16 format.  
+**v2.1.0+:** Native MIDI drivers (no Web MIDI limitations)
 
 ---
 
