@@ -1,18 +1,21 @@
-FROM oven/bun:latest
+FROM node:22-slim as builder
 
-WORKDIR /app
+WORKDIR /app/frontend
 
-# Copy package files
-COPY package.json bun.lockb* ./
+COPY package*.json ./
+RUN npm ci
 
-# Install dependencies with Bun
-RUN bun install --frozen-lockfile
-
-# Copy source
 COPY . .
+RUN npm run build
 
-# Expose Vite dev server port
-EXPOSE 5173
+FROM node:22-slim
 
-# Default command (can be overridden)
-CMD ["bun", "run", "dev"]
+WORKDIR /app/frontend
+
+COPY --from=builder /app/frontend/dist ./dist
+COPY --from=builder /app/frontend/package*.json ./
+RUN npm ci --only=production
+
+EXPOSE 3000
+
+CMD ["npm", "run", "preview"]

@@ -212,6 +212,34 @@ We build this for musicians who love hardware. If you find value, [star the repo
 
 ---
 
+## 📦 Versions & Roadmap
+
+### **v2.0 — Web MIDI** (Current Release)
+✅ Multi-device universal pattern generator  
+✅ 7 drum machines supported  
+✅ Browser-based, no installation  
+✅ Bidirectional pattern conversion  
+
+**How it works:** Web MIDI API communicates directly from your browser to USB MIDI devices.
+
+**Known limitation:** Some users report USB driver issues on Windows/macOS—driver availability varies by OS version.
+
+### **v2.1 — Containerized** (Phase 2 Development)
+🐳 **Why:** Minimize USB driver problems by moving MIDI communication out of the browser into a native backend service.
+
+**What changes:**
+- Backend Python service handles all native MIDI I/O (via pyserial, libmidi bindings)
+- Frontend React app talks to backend over WebSocket (no more Web MIDI API)
+- Docker container pre-bundles all drivers for Mac/Windows/Linux
+- Offline-first operation with no browser MIDI dependencies
+- Supports heavy MIDI traffic (1000+ events/sec) with zero memory leaks
+
+**Setup:** `docker run -p 3000:3000 -p 5000:5000 agentic-instrument`
+
+**Status:** Architecture (M1) ✅ | Drivers (M2) 🔨 | Testing (M4) 📋
+
+---
+
 ## 🏗️ Architecture
 
 ### Core Concepts

@@ -1,48 +1,47 @@
 version: '3.8'
 
 services:
-  # Frontend (React + Vite + Bun build)
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: rhythm-wolf-frontend
+  agentic-instrument:
+    build: .
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "3000:3000"
+      - "5000:5000"
     environment:
-      - VITE_API_URL=http://localhost:8000
-    command: bun run dev
+      - FLASK_ENV=development
+      - NODE_ENV=production
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend/dist:/app/frontend/dist
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  # Backend (FastAPI + Python CLI)
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    container_name: rhythm-wolf-backend
     ports:
-      - "8000:8000"
-    volumes:
-      - ./patterns:/app/patterns
-      - ./rhythm_wolf:/app/rhythm_wolf
-      - ./backend:/app/backend
+      - "5000:5000"
     environment:
-      - PYTHONUNBUFFERED=1
-    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
-    # Uncomment for Linux ALSA support:
-    # devices:
-    #   - /dev/snd
-
-  # CLI (Optional: for testing CLI independently)
-  cli:
-    build: .
-    image: rhythm-wolf:latest
-    container_name: rhythm-wolf-cli
-    stdin_open: true
-    tty: true
+      - FLASK_ENV=development
+      - PORT=5000
     volumes:
-      - ./patterns:/app/patterns
-    profiles:
-      - cli
+      - ./backend:/app/backend
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/public:/app/frontend/public
+    restart: unless-stopped

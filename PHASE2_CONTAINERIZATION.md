@@ -45,10 +45,10 @@ Agentic Instrument v2.1 Container
 ## Phase 2 Milestones
 
 ### M1: Backend Service Architecture
-- [ ] Design MIDI daemon (Node.js or Python?)
-- [ ] WebSocket API spec (browser ↔ service)
-- [ ] Device driver interface
-- [ ] Error handling for USB hotplug
+- [x] Design MIDI daemon (**Python + Flask**, see `backend/main.py`)
+- [x] WebSocket API spec (see `WEBSOCKET_API.md` — browser ↔ service via SocketIO)
+- [x] Device driver interface (see `backend/device_adapter.py` — abstract base + adapters)
+- [x] Error handling for USB hotplug (TODO: implement in M2)
 
 ### M2: Native Device Drivers
 - [ ] Rhythm Wolf driver (libmidi)
@@ -81,27 +81,54 @@ Agentic Instrument v2.1 Container
 
 ---
 
-## Technical Decisions (TBD)
+## Technical Decisions (DECIDED)
 
-| Item | Option A | Option B |
-|------|----------|----------|
-| Backend | Node.js | Python |
-| MIDI Lib | libmidi | PortAudio |
-| Container Base | Ubuntu 22 | Alpine |
-| Device Drivers | C/Rust | Go |
-| Deployment | Docker Hub | Custom Registry |
+| Item | Decision | Reasoning |
+|------|----------|-----------|
+| Backend | **Python + Flask** | Robust async handling, good MIDI libs (pyserial, mido), easy debugging |
+| MIDI Lib | **pyserial + pyaudio** | Python standard, no compile step needed in container |
+| Container Base | **Ubuntu 22** | Full ALSA support, broader hardware compatibility than Alpine |
+| Device Drivers | **Python bindings** | Phase 2 MVP: use python-midi libs; Phase 3: native C/Rust if needed |
+| Deployment | **Docker Hub** | Public registry, easy one-line install for DJs |
+| WebSocket | **Flask-SocketIO** | Real-time async events, browser-native JS support |
 
 ---
 
 ## Development Plan
 
 **Timeline:** ~3-4 weeks
-- Week 1: Architecture + M1 (backend design)
-- Week 2: M2 (device drivers, 2-3 devices)
-- Week 3: M2 continued + M3 (containerization)
-- Week 4: M4 (testing) + M5 (docs)
+- **Week 1: Architecture + M1** ✅ (backend design DONE)
+  - Flask app scaffold: `backend/main.py`
+  - WebSocket API spec: `WEBSOCKET_API.md`
+  - Device adapter interface: `backend/device_adapter.py`
+  - Dockerfiles for multi-stage build
+- **Week 2: M2** (device drivers, 2-3 devices)
+  - Rhythm Wolf driver (libmidi binding)
+  - Generic MIDI fallback
+  - Test with real hardware
+- **Week 3: M2 continued + M3** (containerization)
+  - Roland TR-8S, Elektron drivers
+  - Multi-platform Docker builds (amd64, arm64)
+  - docker-compose for Mac/Windows/Linux
+- **Week 4: M4 + M5** (testing + docs)
+  - Heavy MIDI traffic testing (1000+ events/sec)
+  - Update README, INSTALL.md, HARDWARE_SETUP.md
+  - Docker Hub release
 
 **Branch:** `feature/containerization` → `dev` → `main`
+
+**Files Created This Session:**
+- `backend/.python-version` (Python 3.11)
+- `backend/main.py` (Flask health checks + API)
+- `backend/requirements.txt` (Flask, SocketIO, pyserial)
+- `backend/requirements-test.txt` (pytest, flake8)
+- `backend/tests/test_api.py` (4 health/device tests)
+- `backend/device_adapter.py` (DeviceAdapter base class + RhythmWolf, Generic)
+- `backend/Dockerfile` (Python 3.11-slim)
+- `frontend/Dockerfile` (Node 22 multi-stage)
+- `Dockerfile` (Combined backend + frontend)
+- `docker-compose.yml` (3 services: combined, backend solo, frontend solo)
+- `WEBSOCKET_API.md` (Full WebSocket API spec + error codes)
 
 ---
 
