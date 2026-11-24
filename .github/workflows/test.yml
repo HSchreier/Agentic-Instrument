@@ -93,9 +93,13 @@ jobs:
       - name: Verify imports
         run: python -c "from main import app; print('Backend imports OK')" || true
 
-      - name: Run tests
-        run: pytest -v --tb=short --co -q || pytest -v --tb=short
-        continue-on-error: true
+      - name: Run all backend tests
+        run: pytest tests/ -v --tb=short
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || '' }}
+
+      - name: Device audit (official specs)
+        run: pytest tests/test_device_audit.py -v --tb=short
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || '' }}
 
