@@ -1,21 +1,29 @@
 """
-Agentic Instrument v2.1 — Backend MIDI Service
-Phase 2: Containerized native MIDI driver layer
+Agentic Instrument v2.1 — Backend MIDI Service with WebSocket
+Phase 2: Native MIDI driver integration + real-time events
 """
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
 import logging
+from typing import Dict
+
+from midi_driver import midi_driver, MidiPort
+from rhythm_wolf_driver import create_rhythm_wolf_driver
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# MIDI devices registry (will be populated by device drivers)
-devices = {}
+# Active device drivers
+device_drivers: Dict[str, object] = {}
 
+
+# ========== REST API ==========
 
 @app.route('/api/health', methods=['GET'])
 def health():
@@ -23,52 +31,174 @@ def health():
     return jsonify({
         'status': 'ok',
         'version': '2.1.0-container',
-        'service': 'agentic-instrument-backend'
+        'service': 'agentic-instrument-backend',
+        'midi_available': True
     })
 
 
 @app.route('/api/devices', methods=['GET'])
 def list_devices():
-    """List detected MIDI devices"""
+    """Scan and list available MIDI ports"""
+    ports = midi_driver.scan_ports(force=True)
+    devices = []
+
+    for port in ports:
+        devices.append({
+            'id': port.port_id,
+            'name': port.name,
+            'type': 'rhythm-wolf' if 'wolf' in port.name.lower() else 'generic-midi',
+            'online': port.online
+        })
+
     return jsonify({
-        'devices': list(devices.keys()),
-        'count': len(devices)
+        'devices': devices,
+        'count': len(devices),
+        'timestamp': int(__import__('time').time() * 1000)
     })
-
-
-@app.route('/api/devices/<device_id>', methods=['GET'])
-def get_device(device_id):
-    """Get device details"""
-    if device_id not in devices:
-        return jsonify({'error': 'Device not found'}), 404
-    return jsonify(devices[device_id])
 
 
 @app.route('/api/send', methods=['POST'])
 def send_pattern():
-    """Send pattern to device via native MIDI"""
-    data = request.json
+    """Send pattern to device via REST"""
+    data = request.json or {}
     device_id = data.get('deviceId')
     pattern = data.get('pattern')
+    velocity = data.get('velocity', 100)
 
     if not device_id or not pattern:
         return jsonify({'error': 'Missing deviceId or pattern'}), 400
 
-    if device_id not in devices:
+    # Map device_id to port_name
+    ports = midi_driver.scan_ports()
+    port = next((p for p in ports if p.port_id == device_id), None)
+
+    if not port:
         return jsonify({'error': 'Device not found'}), 404
 
-    logger.info(f"Sending pattern to {device_id}: {len(pattern)} rows")
-    # TODO: Implement native MIDI sending via device drivers
-    return jsonify({
-        'sent': True,
-        'deviceId': device_id,
-        'eventsCount': sum(len(row) for row in pattern)
+    # Connect and send
+    try:
+        driver = device_drivers.get(device_id)
+        if not driver:
+            driver = create_rhythm_wolf_driver()
+            driver.connect(port.name)
+            device_drivers[device_id] = driver
+
+        success = driver.send_pattern(pattern, velocity)
+        events_count = sum(len(row) for row in pattern if row)
+
+        return jsonify({
+            'sent': success,
+            'deviceId': device_id,
+            'eventsCount': events_count,
+            'timestamp': int(__import__('time').time() * 1000)
+        })
+    except Exception as e:
+        logger.error(f"Error sending pattern: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ========== WEBSOCKET EVENTS ==========
+
+@socketio.on('connect')
+def on_connect():
+    """Client connects"""
+    logger.info(f"Client connected: {request.sid}")
+    emit('connected', {'message': 'Backend connected'})
+
+
+@socketio.on('disconnect')
+def on_disconnect():
+    """Client disconnects"""
+    logger.info(f"Client disconnected: {request.sid}")
+
+
+@socketio.on('scan_devices')
+def on_scan_devices():
+    """Scan for MIDI devices"""
+    ports = midi_driver.scan_ports(force=True)
+    devices = []
+
+    for port in ports:
+        devices.append({
+            'id': port.port_id,
+            'name': port.name,
+            'type': 'rhythm-wolf' if 'wolf' in port.name.lower() else 'generic-midi',
+            'online': port.online
+        })
+
+    emit('devices_detected', {
+        'devices': devices,
+        'count': len(devices),
+        'timestamp': int(__import__('time').time() * 1000)
     })
 
 
+@socketio.on('send_pattern')
+def on_send_pattern(data):
+    """Send pattern via WebSocket"""
+    device_id = data.get('deviceId')
+    pattern = data.get('pattern')
+    velocity = data.get('velocity', 100)
+
+    if not device_id or not pattern:
+        emit('pattern_send_error', {
+            'deviceId': device_id,
+            'error': 'Missing deviceId or pattern',
+            'code': 'INVALID_INPUT'
+        })
+        return
+
+    try:
+        # Scan ports to find device
+        ports = midi_driver.scan_ports()
+        port = next((p for p in ports if p.port_id == device_id), None)
+
+        if not port:
+            emit('pattern_send_error', {
+                'deviceId': device_id,
+                'error': 'Device not found',
+                'code': 'DEVICE_NOT_FOUND'
+            })
+            return
+
+        # Get or create driver
+        driver = device_drivers.get(device_id)
+        if not driver:
+            driver = create_rhythm_wolf_driver()
+            if not driver.connect(port.name):
+                emit('pattern_send_error', {
+                    'deviceId': device_id,
+                    'error': 'Failed to connect',
+                    'code': 'CONNECT_FAILED'
+                })
+                return
+            device_drivers[device_id] = driver
+
+        # Send pattern
+        events_count = sum(len(row) for row in pattern if row)
+        success = driver.send_pattern(pattern, velocity)
+
+        emit('pattern_sent', {
+            'deviceId': device_id,
+            'sent': success,
+            'eventsCount': events_count,
+            'duration_ms': 125,
+            'timestamp': int(__import__('time').time() * 1000)
+        })
+    except Exception as e:
+        logger.error(f"Error in send_pattern: {e}")
+        emit('pattern_send_error', {
+            'deviceId': device_id,
+            'error': str(e),
+            'code': 'INTERNAL_ERROR'
+        })
+
+
+# ========== ERROR HANDLERS ==========
+
 @app.errorhandler(404)
 def not_found(error):
-    return jsonify({'error': 'Not found'}), 404
+    return jsonify({'error': 'Endpoint not found'}), 404
 
 
 @app.errorhandler(500)
@@ -80,4 +210,9 @@ def server_error(error):
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('FLASK_ENV') == 'development'
-    app.run(host='0.0.0.0', port=port, debug=debug)
+
+    # Clean shutdown
+    import atexit
+    atexit.register(midi_driver.close_all)
+
+    socketio.run(app, host='0.0.0.0', port=port, debug=debug)
