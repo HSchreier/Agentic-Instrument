@@ -10,7 +10,7 @@ import logging
 from typing import Dict
 
 from midi_driver import midi_driver, MidiPort
-from rhythm_wolf_driver import create_rhythm_wolf_driver
+from device_drivers import get_driver, list_drivers
 
 app = Flask(__name__)
 CORS(app)
@@ -43,10 +43,27 @@ def list_devices():
     devices = []
 
     for port in ports:
+        # Detect device type from port name
+        port_lower = port.name.lower()
+        if 'wolf' in port_lower:
+            device_type = 'rhythm-wolf'
+        elif 'rytm' in port_lower or 'elektron' in port_lower:
+            device_type = 'elektron-rytm-mkii'
+        elif 'tr-8s' in port_lower or 'tr8s' in port_lower:
+            device_type = 'roland-tr8s'
+        elif 'op-z' in port_lower or 'opz' in port_lower:
+            device_type = 'op-z'
+        elif 'volca' in port_lower:
+            device_type = 'volca-keys'
+        elif 'maschine' in port_lower:
+            device_type = 'maschine-mk3'
+        else:
+            device_type = 'generic-midi'
+
         devices.append({
             'id': port.port_id,
             'name': port.name,
-            'type': 'rhythm-wolf' if 'wolf' in port.name.lower() else 'generic-midi',
+            'type': device_type,
             'online': port.online
         })
 
@@ -79,7 +96,7 @@ def send_pattern():
     try:
         driver = device_drivers.get(device_id)
         if not driver:
-            driver = create_rhythm_wolf_driver()
+            driver = get_driver(device_id)
             driver.connect(port.name)
             device_drivers[device_id] = driver
 
@@ -164,7 +181,7 @@ def on_send_pattern(data):
         # Get or create driver
         driver = device_drivers.get(device_id)
         if not driver:
-            driver = create_rhythm_wolf_driver()
+            driver = get_driver(device_id)
             if not driver.connect(port.name):
                 emit('pattern_send_error', {
                     'deviceId': device_id,
