@@ -435,19 +435,42 @@ Toast confirmation
 
 ### Testing
 
+**Local Tests (Before PR):**
 ```bash
-npm run test -- --run          # 38 tests (all pass)
-npm run type-check            # TypeScript (0 errors)
-npm run lint                  # ESLint (Phase 3 code clean)
+npm run test -- --run          # Frontend: 38 tests (all pass)
+npm run type-check            # TypeScript (0 errors, 100% safe)
+npm run lint                  # ESLint
+
+cd backend
+pytest tests/ -v              # Backend: 61 tests (all pass)
 ```
 
-Test coverage:
-- ✅ 7 adapters registered correctly
-- ✅ Universal ↔ Device translation
+**Automated PR Testing (GitHub Actions):**
+
+Every pull request automatically runs:
+- ✅ **61 Backend Tests** — Device drivers, MIDI layer, API endpoints
+- ✅ **38 Frontend Tests** — Adapters, translation, migration
+- ✅ **TypeScript Strict** — 0 errors, 100% type-safe
+- ✅ **Security Scan** — gitleaks (no secrets), npm/pip audit
+- ✅ **Docker Build** — Multi-stage build verified, trivy scan
+- ✅ **Mock Device Tests** — All 8 devices tested without hardware
+- ✅ **API Contract Tests** — Health, devices, send endpoints verified
+- ✅ **Performance Checks** — Pattern conversion (<1ms), memory, latency
+
+**Result:** No broken changes merge to dev ✅
+
+**See:** [PR_TESTING_STRATEGY.md](PR_TESTING_STRATEGY.md) for detailed testing pipeline
+
+**Test Coverage:**
+- ✅ 8 device adapters (Rhythm Wolf, Elektron×2, Roland, OP-Z, Volca, Maschine, Generic)
+- ✅ Universal ↔ Device translation (bidirectional)
 - ✅ Device switching with pattern conversion
 - ✅ Multi-page device support
 - ✅ Pattern analysis & density
 - ✅ v1.0 → v2.0 migration
+- ✅ MIDI driver communication
+- ✅ WebSocket real-time events
+- ✅ Docker containerization
 
 ## 💻 Running the Web UI
 
@@ -1369,9 +1392,23 @@ Contributions welcome! Current work:
 **To contribute:**
 1. Fork the repo
 2. Create a branch (`git checkout -b feature/my-feature`)
-3. Commit changes (`git commit -m "Add my feature"`)
-4. Push (`git push origin feature/my-feature`)
-5. Open a Pull Request
+3. Run tests locally: `npm run test` (frontend) + `pytest tests/` (backend)
+4. Commit changes (`git commit -m "Add my feature"`)
+5. Push (`git push origin feature/my-feature`)
+6. Open a Pull Request
+
+**Automated Testing on PR:**
+Every pull request automatically runs:
+- 61 backend tests (all 8 devices, MIDI driver, API)
+- 38 frontend tests (adapters, translation, UI)
+- TypeScript strict mode (100% type-safe)
+- Security scans (gitleaks, npm audit, pip audit)
+- Docker build verification
+- Performance checks (<1ms conversion, <500MB memory)
+
+✅ No broken changes merge to dev
+
+See [PR_TESTING_STRATEGY.md](PR_TESTING_STRATEGY.md) for detailed testing pipeline.
 
 ---
 
