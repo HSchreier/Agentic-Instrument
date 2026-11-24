@@ -17,6 +17,11 @@ backend/.venv
 dist/
 build/
 
+# Pip artifacts from failed installs
+backend/=*
+backend/cryptography
+backend/fastapi
+
 # Project briefs and insights
 DESIGN_BRIEF.md
 DESIGN_IMPLEMENTATION_ANALYSIS.md
